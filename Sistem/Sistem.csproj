@@ -1,0 +1,597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5EA965DD-A68C-4782-B939-80D33D9AC500}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sistem</RootNamespace>
+    <AssemblyName>Sistem</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="kk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\kk.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
+      <HintPath>DLL\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation">
+      <HintPath>DLL\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder2">
+      <HintPath>DLL\Microsoft.Practices.ObjectBuilder2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>DLL\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>DLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuraiton\SiteConfiguration.cs" />
+    <Compile Include="DB\Model\AdmBankcreditsHead.cs" />
+    <Compile Include="DB\Model\AdmBankcreditsLine.cs" />
+    <Compile Include="DB\Model\AdmBankcreditsLineTmp.cs" />
+    <Compile Include="DB\Model\AdmBankcreditsTypes.cs" />
+    <Compile Include="DB\Model\AdmBiBankaLimitleri.cs" />
+    <Compile Include="DB\Model\AdmAkbzOffer.cs" />
+    <Compile Include="DB\Model\AdmAkbzOfferitems.cs" />
+    <Compile Include="DB\Model\AdmBiKurTahminleme.cs" />
+    <Compile Include="DB\Model\AdmBiReferansfaiz.cs" />
+    <Compile Include="DB\Model\AdmBiSablon.cs" />
+    <Compile Include="DB\Model\AdmBiSabloncode.cs" />
+    <Compile Include="DB\Model\AdmBiSablonformul.cs" />
+    <Compile Include="DB\Model\AdmBiSablonresult.cs" />
+    <Compile Include="DB\Model\AdmBomhead.cs" />
+    <Compile Include="DB\Model\AdmBomitem.cs" />
+    <Compile Include="DB\Model\AdmCashflowDelay.cs" />
+    <Compile Include="DB\Model\AdmCashflowPayment.cs" />
+    <Compile Include="DB\Model\AdmCompany.cs" />
+    <Compile Include="DB\Model\AdmDashboard.cs" />
+    <Compile Include="DB\Model\AdmDashsum.cs" />
+    <Compile Include="DB\Model\AdmDbsbanklimit.cs" />
+    <Compile Include="DB\Model\AdmDbsconnection.cs" />
+    <Compile Include="DB\Model\AdmDepartment.cs" />
+    <Compile Include="DB\Model\AdmDesign.cs" />
+    <Compile Include="DB\Model\AdmDocument.cs" />
+    <Compile Include="DB\Model\AdmEdcOffer.cs" />
+    <Compile Include="DB\Model\AdmEdcOfferApproval.cs" />
+    <Compile Include="DB\Model\AdmEdcOffercredit.cs" />
+    <Compile Include="DB\Model\AdmEdcOffercreditApproval.cs" />
+    <Compile Include="DB\Model\AdmEdcOffercredititems.cs" />
+    <Compile Include="DB\Model\AdmEdcOffercredittrans.cs" />
+    <Compile Include="DB\Model\AdmEdcOfferitems.cs" />
+    <Compile Include="DB\Model\AdmEdcOfferPayment.cs" />
+    <Compile Include="DB\Model\AdmEnderAlisbirimmaliyet.cs" />
+    <Compile Include="DB\Model\AdmEnderEkmaliyet.cs" />
+    <Compile Include="DB\Model\AdmEnderItemproperties.cs" />
+    <Compile Include="DB\Model\AdmEnderMamulRecete.cs" />
+    <Compile Include="DB\Model\AdmEnderMikserRecete.cs" />
+    <Compile Include="DB\Model\AdmEnderOffer.cs" />
+    <Compile Include="DB\Model\AdmEnderOfferitems.cs" />
+    <Compile Include="DB\Model\AdmEnderPricelist.cs" />
+    <Compile Include="DB\Model\AdmEnderPricelistItems.cs" />
+    <Compile Include="DB\Model\AdmEnderUretimmiktar.cs" />
+    <Compile Include="DB\Model\AdmErdrItempropmatch.cs" />
+    <Compile Include="DB\Model\AdmErdrOfferitemgroupNames.cs" />
+    <Compile Include="DB\Model\AdmErdrOfferitemgroupUnits.cs" />
+    <Compile Include="DB\Model\AdmExcellTemplate.cs" />
+    <Compile Include="DB\Model\AdmIcmal.cs" />
+    <Compile Include="DB\Model\AdmInfobox.cs" />
+    <Compile Include="DB\Model\AdmItems.cs" />
+    <Compile Include="DB\Model\AdmModuleConf.cs" />
+    <Compile Include="DB\Model\AdmOffercredit.cs" />
+    <Compile Include="DB\Model\AdmOffercreditdiscounts.cs" />
+    <Compile Include="DB\Model\AdmOffercredititems.cs" />
+    <Compile Include="DB\Model\AdmOffercredittrans.cs" />
+    <Compile Include="DB\Model\AdmPaylist.cs" />
+    <Compile Include="DB\Model\AdmPrdconf.cs" />
+    <Compile Include="DB\Model\AdmProdFpProdfiche.cs" />
+    <Compile Include="DB\Model\AdmProdFpUsagefiche.cs" />
+    <Compile Include="DB\Model\AdmProdFpUsageficheline.cs" />
+    <Compile Include="DB\Model\AdmPurOrderpayment.cs" />
+    <Compile Include="DB\Model\AdmPurPurtype.cs" />
+    <Compile Include="DB\Model\AdmRouactivity.cs" />
+    <Compile Include="DB\Model\AdmSalesprofitdata.cs" />
+    <Compile Include="DB\Model\AdmSupportTable.cs" />
+    <Compile Include="DB\Model\AdmTmzItemMachine.cs" />
+    <Compile Include="DB\Model\AdmTmzItemprops.cs" />
+    <Compile Include="DB\Model\AdmTmzKalip.cs" />
+    <Compile Include="DB\Model\AdmTmzOffer.cs" />
+    <Compile Include="DB\Model\AdmTmzOfferitems.cs" />
+    <Compile Include="DB\Model\AdmTmzOfferitemsBook.cs" />
+    <Compile Include="DB\Model\AdmTmzOfferitemsExcel.cs" />
+    <Compile Include="DB\Model\AdmWaitingorderNotes.cs" />
+    <Compile Include="DB\Model\AdmWorkcenterPerson.cs" />
+    <Compile Include="DB\Model\BaseModel.cs" />
+    <Compile Include="DB\Model\AdmSalorderhead.cs" />
+    <Compile Include="DB\Model\AdmSalorderline.cs" />
+    <Compile Include="DB\Model\AdmShiporder.cs" />
+    <Compile Include="DB\Model\AdmShiporderitems.cs" />
+    <Compile Include="DB\Model\AdmSysPopupcolumn.cs" />
+    <Compile Include="DB\Model\AdmSysPopuphead.cs" />
+    <Compile Include="DB\Model\AdmSysReportcolumn.cs" />
+    <Compile Include="DB\Model\AdmSysReporthead.cs" />
+    <Compile Include="DB\Model\AdmSysWebreport.cs" />
+    <Compile Include="DB\Model\AdmZyhnOffer.cs" />
+    <Compile Include="DB\Model\AdmErdrOffer.cs" />
+    <Compile Include="DB\Model\AdmZyhnOfferApproval.cs" />
+    <Compile Include="DB\Model\AdmErdrOfferApproval.cs" />
+    <Compile Include="DB\Model\AdmErdrOfferitemgroup.cs" />
+    <Compile Include="DB\Model\AdmZyhnOfferitems.cs" />
+    <Compile Include="DB\Model\AdmErdrOfferitems.cs" />
+    <Compile Include="DB\Model\AdmErdrOfferitemstmp.cs" />
+    <Compile Include="DB\Model\AdmZyhnOfferPayment.cs" />
+    <Compile Include="DB\Model\AdmErdrOfferPayment.cs" />
+    <Compile Include="DB\Model\AdmItemAccSupplier.cs" />
+    <Compile Include="DB\Model\AdmItemproperties.cs" />
+    <Compile Include="DB\Model\AdmLangu.cs" />
+    <Compile Include="DB\Model\AdmLoadingorder.cs" />
+    <Compile Include="DB\Model\AdmLoadingorderitems.cs" />
+    <Compile Include="DB\Model\AdmLog.cs" />
+    <Compile Include="DB\Model\AdmLogUser.cs" />
+    <Compile Include="DB\Model\AdmLogUserSign.cs" />
+    <Compile Include="DB\Model\AdmMenu.cs" />
+    <Compile Include="DB\Model\AdmOperation.cs" />
+    <Compile Include="DB\Model\AdmItempropertiesx.cs" />
+    <Compile Include="DB\Model\AdmOperationx.cs" />
+    <Compile Include="DB\Model\AdmParams.cs" />
+    <Compile Include="DB\Model\AdmParamsx.cs" />
+    <Compile Include="DB\Model\AdmPrditem.cs" />
+    <Compile Include="DB\Model\AdmPrditemLot.cs" />
+    <Compile Include="DB\Model\AdmPrdopr.cs" />
+    <Compile Include="DB\Model\AdmPrdorder.cs" />
+    <Compile Include="DB\Model\AdmPrdpersonnel.cs" />
+    <Compile Include="DB\Model\AdmPrdshift.cs" />
+    <Compile Include="DB\Model\AdmPrdStopcode.cs" />
+    <Compile Include="DB\Model\AdmPrdStops.cs" />
+    <Compile Include="DB\Model\AdmPrdtype.cs" />
+    <Compile Include="DB\Model\AdmPurAuthgroup.cs" />
+    <Compile Include="DB\Model\AdmPurAuthgroupuser.cs" />
+    <Compile Include="DB\Model\AdmPurDemandhead.cs" />
+    <Compile Include="DB\Model\AdmPurDemanditem.cs" />
+    <Compile Include="DB\Model\AdmPurOfferhead.cs" />
+    <Compile Include="DB\Model\AdmPurOfferitem.cs" />
+    <Compile Include="DB\Model\AdmPurOffervendhead.cs" />
+    <Compile Include="DB\Model\AdmPurOffervenditem.cs" />
+    <Compile Include="DB\Model\AdmPurOrderhead.cs" />
+    <Compile Include="DB\Model\AdmPurOrderitem.cs" />
+    <Compile Include="DB\Model\AdmQltHead.cs" />
+    <Compile Include="DB\Model\AdmQltLine.cs" />
+    <Compile Include="DB\Model\AdmQltParam.cs" />
+    <Compile Include="DB\Model\AdmQltParamitem.cs" />
+    <Compile Include="DB\Model\AdmQltParamitemspekt.cs" />
+    <Compile Include="DB\Model\AdmQltParamval.cs" />
+    <Compile Include="DB\Model\AdmRetailSale.cs" />
+    <Compile Include="DB\Model\AdmRetailSaleitems.cs" />
+    <Compile Include="DB\Model\AdmRouhead.cs" />
+    <Compile Include="DB\Model\AdmRouitem.cs" />
+    <Compile Include="DB\Model\AdmRouopr.cs" />
+    <Compile Include="DB\Model\AdmSalesbudget.cs" />
+    <Compile Include="DB\Model\AdmScoring.cs" />
+    <Compile Include="DB\Model\AdmSettings.cs" />
+    <Compile Include="DB\Model\AdmUserDashboard.cs" />
+    <Compile Include="DB\Model\AdmUserDashsum.cs" />
+    <Compile Include="DB\Model\AdmUserMenu.cs" />
+    <Compile Include="DB\Model\AdmUsers.cs" />
+    <Compile Include="DB\Model\AdmWorkcenter.cs" />
+    <Compile Include="DB\Model\AdmWorkfowuser.cs" />
+    <Compile Include="DB\Model\AdmWorkgroup.cs" />
+    <Compile Include="DB\Model\AdmWorkorder.cs" />
+    <Compile Include="DB\Model\AdmWorkorderitems.cs" />
+    <Compile Include="DB\Model\AdmWorkstation.cs" />
+    <Compile Include="DB\Model\AdmWorkcenterx.cs" />
+    <Compile Include="DB\Model\hazalmenu.cs" />
+    <Compile Include="DB\Model\hazaluser.cs" />
+    <Compile Include="DB\Model\hazalusermenu.cs" />
+    <Compile Include="DB\Model\WmsItembarcode.cs" />
+    <Compile Include="DB\Model\WmsLocation.cs" />
+    <Compile Include="DB\Model\WmsMovefiche.cs" />
+    <Compile Include="DB\Model\WmsMoveline.cs" />
+    <Compile Include="DB\Model\WmsMovelineQuality.cs" />
+    <Compile Include="DB\Model\WmsPurorder.cs" />
+    <Compile Include="DB\Model\WmsPurorderitems.cs" />
+    <Compile Include="DB\Model\WmsTempPurorderline.cs" />
+    <Compile Include="DB\Model\WmsTempShiporderline.cs" />
+    <Compile Include="DB\Model\WmsTransorderhead.cs" />
+    <Compile Include="DB\Model\WmsTransorderline.cs" />
+    <Compile Include="DB\Model\WmsWhcheckhead.cs" />
+    <Compile Include="DB\Model\WmsWhcheckline.cs" />
+    <Compile Include="DB\Repo\AdmAkbzOfferitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmAkbzOfferRepo.cs" />
+    <Compile Include="DB\Repo\AdmBankcreditsHeadRepo.cs" />
+    <Compile Include="DB\Repo\AdmBankcreditsLineRepo.cs" />
+    <Compile Include="DB\Repo\AdmBankcreditsLineTmpRepo.cs" />
+    <Compile Include="DB\Repo\AdmBankcreditsTypesRepo.cs" />
+    <Compile Include="DB\Repo\AdmBiKurTahminlemeRepo.cs" />
+    <Compile Include="DB\Repo\AdmBiReferansfaizRepo.cs" />
+    <Compile Include="DB\Repo\AdmBiSabloncodeRepo.cs" />
+    <Compile Include="DB\Repo\AdmBiSablonformulRepo.cs" />
+    <Compile Include="DB\Repo\AdmBiSablonRepo.cs" />
+    <Compile Include="DB\Repo\AdmBiSablonresultRepo.cs" />
+    <Compile Include="DB\Repo\AdmBomheadRepo.cs" />
+    <Compile Include="DB\Repo\AdmBomitemRepo.cs" />
+    <Compile Include="DB\Repo\AdmCashflowDelayRepo.cs" />
+    <Compile Include="DB\Repo\AdmCashflowPaymentRepo.cs" />
+    <Compile Include="DB\Repo\AdmCompanyRepo.cs" />
+    <Compile Include="DB\Repo\AdmDashboardRepo.cs" />
+    <Compile Include="DB\Repo\AdmDashsumRepo.cs" />
+    <Compile Include="DB\Repo\AdmDbsbanklimitRepo.cs" />
+    <Compile Include="DB\Repo\AdmDbsconnectionRepo.cs" />
+    <Compile Include="DB\Repo\AdmDepartmentRepo.cs" />
+    <Compile Include="DB\Repo\AdmDesignRepo.cs" />
+    <Compile Include="DB\Repo\AdmDocumentRepo.cs" />
+    <Compile Include="DB\Repo\AdmEdcOfferApprovalRepo.cs" />
+    <Compile Include="DB\Repo\AdmEdcOffercreditApprovalRepo.cs" />
+    <Compile Include="DB\Repo\AdmEdcOffercredititemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmEdcOffercreditRepo.cs" />
+    <Compile Include="DB\Repo\AdmEdcOffercredittransRepo.cs" />
+    <Compile Include="DB\Repo\AdmEdcOfferitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmEdcOfferPaymentRepo.cs" />
+    <Compile Include="DB\Repo\AdmEdcOfferRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderAlisbirimmaliyetRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderEkmaliyetRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderItempropertiesRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderMamulReceteRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderMikserReceteRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderOfferitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderOfferRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderPricelistItemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderPricelistRepo.cs" />
+    <Compile Include="DB\Repo\AdmEnderUretimmiktarRepo.cs" />
+    <Compile Include="DB\Repo\AdmErdrItempropmatchRepo.cs" />
+    <Compile Include="DB\Repo\AdmErdrOfferitemgroupNamesRepo.cs" />
+    <Compile Include="DB\Repo\AdmErdrOfferitemgroupUnitsRepo.cs" />
+    <Compile Include="DB\Repo\AdmExcellTemplateRepo.cs" />
+    <Compile Include="DB\Repo\AdmIcmalRepo.cs" />
+    <Compile Include="DB\Repo\AdmInfoboxRepo.cs" />
+    <Compile Include="DB\Repo\AdmItemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmModuleConfRepo.cs" />
+    <Compile Include="DB\Repo\AdmOffercreditdiscountsRepo.cs" />
+    <Compile Include="DB\Repo\AdmOffercredititemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmOffercreditRepo.cs" />
+    <Compile Include="DB\Repo\AdmOffercredittransRepo.cs" />
+    <Compile Include="DB\Repo\AdmPaylistRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrdconfRepo.cs" />
+    <Compile Include="DB\Repo\AdmProdFpProdficheRepo.cs" />
+    <Compile Include="DB\Repo\AdmProdFpUsagefichelineRepo.cs" />
+    <Compile Include="DB\Repo\AdmProdFpUsageficheRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurOrderpaymentRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurPurtypeRepo.cs" />
+    <Compile Include="DB\Repo\AdmRouactivityRepo.cs" />
+    <Compile Include="DB\Repo\AdmSalesprofitdataRepo.cs" />
+    <Compile Include="DB\Repo\AdmSalorderheadRepo.cs" />
+    <Compile Include="DB\Repo\AdmSalorderlineRepo.cs" />
+    <Compile Include="DB\Repo\AdmShiporderitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmShiporderRepo.cs" />
+    <Compile Include="DB\Repo\AdmSupportTableRepo.cs" />
+    <Compile Include="DB\Repo\AdmSysPopupcolumnRepo.cs" />
+    <Compile Include="DB\Repo\AdmSysPopupheadRepo.cs" />
+    <Compile Include="DB\Repo\AdmSysReportcolumnRepo.cs" />
+    <Compile Include="DB\Repo\AdmSysReportheadRepo.cs" />
+    <Compile Include="DB\Repo\AdmSysWebreportRepo.cs" />
+    <Compile Include="DB\Repo\AdmTmzItemMachineRepo.cs" />
+    <Compile Include="DB\Repo\AdmTmzItempropsRepo.cs" />
+    <Compile Include="DB\Repo\AdmTmzKalipRepo.cs" />
+    <Compile Include="DB\Repo\AdmTmzOfferitemsBookRepo.cs" />
+    <Compile Include="DB\Repo\AdmTmzOfferitemsExcelRepo.cs" />
+    <Compile Include="DB\Repo\AdmTmzOfferitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmTmzOfferRepo.cs" />
+    <Compile Include="DB\Repo\AdmWaitingorderNotesRepo.cs" />
+    <Compile Include="DB\Repo\AdmWorkcenterPersonRepo.cs" />
+    <Compile Include="DB\Repo\AdmZyhnOfferApprovalRepo.cs" />
+    <Compile Include="DB\Repo\AdmErdrOfferApprovalRepo.cs" />
+    <Compile Include="DB\Repo\AdmErdrOfferitemgroupRepo.cs" />
+    <Compile Include="DB\Repo\AdmZyhnOfferitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmErdrOfferitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmErdrOfferitemstmpRepo.cs" />
+    <Compile Include="DB\Repo\AdmZyhnOfferPaymentRepo.cs" />
+    <Compile Include="DB\Repo\AdmErdrOfferPaymentRepo.cs" />
+    <Compile Include="DB\Repo\AdmZyhnOfferRepo.cs" />
+    <Compile Include="DB\Repo\AdmErdrOfferRepo.cs" />
+    <Compile Include="DB\Repo\AdmItemAccSupplierRepo.cs" />
+    <Compile Include="DB\Repo\AdmItempropertiesRepo.cs" />
+    <Compile Include="DB\Repo\AdmLanguRepo.cs" />
+    <Compile Include="DB\Repo\AdmLoadingorderitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmLoadingorderRepo.cs" />
+    <Compile Include="DB\Repo\AdmLogRepo.cs" />
+    <Compile Include="DB\Repo\AdmLogUserRepo.cs" />
+    <Compile Include="DB\Repo\AdmLogUserSignRepo.cs" />
+    <Compile Include="DB\Repo\AdmMenuRepo.cs" />
+    <Compile Include="DB\Repo\AdmOperationRepo.cs" />
+    <Compile Include="DB\Repo\AdmItempropertiesxRepo.cs" />
+    <Compile Include="DB\Repo\AdmOperationxRepo.cs" />
+    <Compile Include="DB\Repo\AdmParamsRepo.cs" />
+    <Compile Include="DB\Repo\AdmParamsxRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrditemLotRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrditemRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrdoprRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrdorderRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrdpersonnelRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrdshiftRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrdStopcodeRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrdStopsRepo.cs" />
+    <Compile Include="DB\Repo\AdmPrdtypeRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurAuthgroupRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurAuthgroupuserRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurDemandheadRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurDemanditemRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurOfferheadRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurOfferitemRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurOffervendheadRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurOffervenditemRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurOrderheadRepo.cs" />
+    <Compile Include="DB\Repo\AdmPurOrderitemRepo.cs" />
+    <Compile Include="DB\Repo\AdmQltHeadRepo.cs" />
+    <Compile Include="DB\Repo\AdmQltLineRepo.cs" />
+    <Compile Include="DB\Repo\AdmQltParamitemRepo.cs" />
+    <Compile Include="DB\Repo\AdmQltParamitemspektRepo.cs" />
+    <Compile Include="DB\Repo\AdmQltParamRepo.cs" />
+    <Compile Include="DB\Repo\AdmQltParamvalRepo.cs" />
+    <Compile Include="DB\Repo\AdmRetailSaleitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmRetailSaleRepo.cs" />
+    <Compile Include="DB\Repo\AdmRouheadRepo.cs" />
+    <Compile Include="DB\Repo\AdmRouitemRepo.cs" />
+    <Compile Include="DB\Repo\AdmRouoprRepo.cs" />
+    <Compile Include="DB\Repo\AdmSalesbudgetRepo.cs" />
+    <Compile Include="DB\Repo\AdmScoringRepo.cs" />
+    <Compile Include="DB\Repo\AdmSettingsRepo.cs" />
+    <Compile Include="DB\Repo\AdmUserDashboardRepo.cs" />
+    <Compile Include="DB\Repo\AdmUserDashsumRepo.cs" />
+    <Compile Include="DB\Repo\AdmUserMenuRepo.cs" />
+    <Compile Include="DB\Repo\AdmUsersRepo.cs" />
+    <Compile Include="DB\Repo\AdmWorkcenterRepo.cs" />
+    <Compile Include="DB\Repo\AdmWorkfowuserRepo.cs" />
+    <Compile Include="DB\Repo\AdmWorkgroupRepo.cs" />
+    <Compile Include="DB\Repo\AdmWorkorderitemsRepo.cs" />
+    <Compile Include="DB\Repo\AdmWorkorderRepo.cs" />
+    <Compile Include="DB\Repo\AdmWorkstationRepo.cs" />
+    <Compile Include="DB\Repo\AdmWorkcenterxRepo.cs" />
+    <Compile Include="DB\Repo\BaseRepository.cs" />
+    <Compile Include="DB\Repo\GenelRepo.cs" />
+    <Compile Include="DB\Repo\hazalmenurepo.cs" />
+    <Compile Include="DB\Repo\hazalusermenurepo.cs" />
+    <Compile Include="DB\Repo\hazaluserrepo.cs" />
+    <Compile Include="DB\Repo\WmsItembarcodeRepo.cs" />
+    <Compile Include="DB\Repo\WmsLocationRepo.cs" />
+    <Compile Include="DB\Repo\WmsMoveficheRepo.cs" />
+    <Compile Include="DB\Repo\WmsMovelineQualityRepo.cs" />
+    <Compile Include="DB\Repo\WmsMovelineRepo.cs" />
+    <Compile Include="DB\Repo\WmsPurorderitemsRepo.cs" />
+    <Compile Include="DB\Repo\WmsPurorderRepo.cs" />
+    <Compile Include="DB\Repo\WmsTempPurorderlineRepo.cs" />
+    <Compile Include="DB\Repo\WmsTempShiporderlineRepo.cs" />
+    <Compile Include="DB\Repo\WmsTransorderheadRepo.cs" />
+    <Compile Include="DB\Repo\WmsTransorderlineRepo.cs" />
+    <Compile Include="DB\Repo\WmsWhcheckheadRepo.cs" />
+    <Compile Include="DB\Repo\WmsWhchecklineRepo.cs" />
+    <Compile Include="DB\Service\AdmAkbzOfferitemsService.cs" />
+    <Compile Include="DB\Service\AdmAkbzOfferService.cs" />
+    <Compile Include="DB\Service\AdmBankcreditsHeadService.cs" />
+    <Compile Include="DB\Service\AdmBankcreditsLineService.cs" />
+    <Compile Include="DB\Service\AdmBankcreditsLineTmpService.cs" />
+    <Compile Include="DB\Service\AdmBankcreditsTypesService.cs" />
+    <Compile Include="DB\Service\AdmBiKurTahminlemeService.cs" />
+    <Compile Include="DB\Service\AdmBiReferansfaizService.cs" />
+    <Compile Include="DB\Service\AdmBiSabloncodeService.cs" />
+    <Compile Include="DB\Service\AdmBiSablonformulService.cs" />
+    <Compile Include="DB\Service\AdmBiSablonresultService.cs" />
+    <Compile Include="DB\Service\AdmBiSablonService.cs" />
+    <Compile Include="DB\Service\AdmBomheadService.cs" />
+    <Compile Include="DB\Service\AdmBomitemService.cs" />
+    <Compile Include="DB\Service\AdmCashflowDelayService.cs" />
+    <Compile Include="DB\Service\AdmCashflowPaymentService.cs" />
+    <Compile Include="DB\Service\AdmCompanyService.cs" />
+    <Compile Include="DB\Service\AdmDashboardService.cs" />
+    <Compile Include="DB\Service\AdmDashsumService.cs" />
+    <Compile Include="DB\Service\AdmDbsbanklimitService.cs" />
+    <Compile Include="DB\Service\AdmDbsconnectionService.cs" />
+    <Compile Include="DB\Service\AdmDepartmentService.cs" />
+    <Compile Include="DB\Service\AdmDesignService.cs" />
+    <Compile Include="DB\Service\AdmDocumentService.cs" />
+    <Compile Include="DB\Service\AdmEdcOfferApprovalService.cs" />
+    <Compile Include="DB\Service\AdmEdcOffercreditApprovalService.cs" />
+    <Compile Include="DB\Service\AdmEdcOffercredititemsService.cs" />
+    <Compile Include="DB\Service\AdmEdcOffercreditService.cs" />
+    <Compile Include="DB\Service\AdmEdcOffercredittransService.cs" />
+    <Compile Include="DB\Service\AdmEdcOfferitemsService.cs" />
+    <Compile Include="DB\Service\AdmEdcOfferPaymentService.cs" />
+    <Compile Include="DB\Service\AdmEdcOfferService.cs" />
+    <Compile Include="DB\Service\AdmEnderAlisbirimmaliyetService.cs" />
+    <Compile Include="DB\Service\AdmEnderEkmaliyetService.cs" />
+    <Compile Include="DB\Service\AdmEnderItempropertiesService.cs" />
+    <Compile Include="DB\Service\AdmEnderMamulReceteService.cs" />
+    <Compile Include="DB\Service\AdmEnderMikserReceteService.cs" />
+    <Compile Include="DB\Service\AdmEnderOfferitemsService.cs" />
+    <Compile Include="DB\Service\AdmEnderOfferService.cs" />
+    <Compile Include="DB\Service\AdmEnderPricelistItemsService.cs" />
+    <Compile Include="DB\Service\AdmEnderPricelistService.cs" />
+    <Compile Include="DB\Service\AdmEnderUretimmiktarService.cs" />
+    <Compile Include="DB\Service\AdmErdrItempropmatchService.cs" />
+    <Compile Include="DB\Service\AdmErdrOfferitemgroupNamesService.cs" />
+    <Compile Include="DB\Service\AdmErdrOfferitemgroupUnitsService.cs" />
+    <Compile Include="DB\Service\AdmExcellTemplateService.cs" />
+    <Compile Include="DB\Service\AdmIcmalService.cs" />
+    <Compile Include="DB\Service\AdmInfoboxService.cs" />
+    <Compile Include="DB\Service\AdmItemsService.cs" />
+    <Compile Include="DB\Service\AdmModuleConfService.cs" />
+    <Compile Include="DB\Service\AdmOffercreditdiscountsService.cs" />
+    <Compile Include="DB\Service\AdmOffercredititemsService.cs" />
+    <Compile Include="DB\Service\AdmOffercreditService.cs" />
+    <Compile Include="DB\Service\AdmOffercredittransService.cs" />
+    <Compile Include="DB\Service\AdmPaylistService.cs" />
+    <Compile Include="DB\Service\AdmPrdconfService.cs" />
+    <Compile Include="DB\Service\AdmProdFpProdficheService.cs" />
+    <Compile Include="DB\Service\AdmProdFpUsagefichelineService.cs" />
+    <Compile Include="DB\Service\AdmProdFpUsageficheService.cs" />
+    <Compile Include="DB\Service\AdmPurOrderpaymentService.cs" />
+    <Compile Include="DB\Service\AdmPurPurtypeService.cs" />
+    <Compile Include="DB\Service\AdmRouactivityService.cs" />
+    <Compile Include="DB\Service\AdmSalesprofitdataService.cs" />
+    <Compile Include="DB\Service\AdmSalorderheadService.cs" />
+    <Compile Include="DB\Service\AdmSalorderlineService.cs" />
+    <Compile Include="DB\Service\AdmShiporderitemsService.cs" />
+    <Compile Include="DB\Service\AdmShiporderService.cs" />
+    <Compile Include="DB\Service\AdmSupportTableService.cs" />
+    <Compile Include="DB\Service\AdmSysPopupcolumnService.cs" />
+    <Compile Include="DB\Service\AdmSysPopupheadService.cs" />
+    <Compile Include="DB\Service\AdmSysReportcolumnService.cs" />
+    <Compile Include="DB\Service\AdmSysReportheadService.cs" />
+    <Compile Include="DB\Service\AdmSysWebreportService.cs" />
+    <Compile Include="DB\Service\AdmTmzItemMachineService.cs" />
+    <Compile Include="DB\Service\AdmTmzItempropsService.cs" />
+    <Compile Include="DB\Service\AdmTmzKalipService.cs" />
+    <Compile Include="DB\Service\AdmTmzOfferitemsBookService.cs" />
+    <Compile Include="DB\Service\AdmTmzOfferitemsExcelService.cs" />
+    <Compile Include="DB\Service\AdmTmzOfferitemsService.cs" />
+    <Compile Include="DB\Service\AdmTmzOfferService.cs" />
+    <Compile Include="DB\Service\AdmWaitingorderNotesService.cs" />
+    <Compile Include="DB\Service\AdmWorkcenterPersonService.cs" />
+    <Compile Include="DB\Service\AdmZyhnOfferApprovalService.cs" />
+    <Compile Include="DB\Service\AdmErdrOfferApprovalService.cs" />
+    <Compile Include="DB\Service\AdmErdrOfferitemgroupService.cs" />
+    <Compile Include="DB\Service\AdmZyhnOfferitemsService.cs" />
+    <Compile Include="DB\Service\AdmErdrOfferitemsService.cs" />
+    <Compile Include="DB\Service\AdmErdrOfferitemstmpService.cs" />
+    <Compile Include="DB\Service\AdmZyhnOfferPaymentService.cs" />
+    <Compile Include="DB\Service\AdmErdrOfferPaymentService.cs" />
+    <Compile Include="DB\Service\AdmZyhnOfferService.cs" />
+    <Compile Include="DB\Service\AdmErdrOfferService.cs" />
+    <Compile Include="DB\Service\AdmItemAccSupplierService.cs" />
+    <Compile Include="DB\Service\AdmItempropertiesService.cs" />
+    <Compile Include="DB\Service\AdmLanguService.cs" />
+    <Compile Include="DB\Service\AdmLoadingorderitemsService.cs" />
+    <Compile Include="DB\Service\AdmLoadingorderService.cs" />
+    <Compile Include="DB\Service\AdmLogService.cs" />
+    <Compile Include="DB\Service\AdmLogUserService.cs" />
+    <Compile Include="DB\Service\AdmLogUserSignService.cs" />
+    <Compile Include="DB\Service\AdmMenuService.cs" />
+    <Compile Include="DB\Service\AdmOperationService.cs" />
+    <Compile Include="DB\Service\AdmItempropertiesxService.cs" />
+    <Compile Include="DB\Service\AdmOperationxService.cs" />
+    <Compile Include="DB\Service\AdmParamsService.cs" />
+    <Compile Include="DB\Service\AdmParamsxService.cs" />
+    <Compile Include="DB\Service\AdmPrditemLotService.cs" />
+    <Compile Include="DB\Service\AdmPrditemService.cs" />
+    <Compile Include="DB\Service\AdmPrdoprService.cs" />
+    <Compile Include="DB\Service\AdmPrdorderService.cs" />
+    <Compile Include="DB\Service\AdmPrdpersonnelService.cs" />
+    <Compile Include="DB\Service\AdmPrdshiftService.cs" />
+    <Compile Include="DB\Service\AdmPrdStopcodeService.cs" />
+    <Compile Include="DB\Service\AdmPrdStopsService.cs" />
+    <Compile Include="DB\Service\AdmPrdtypeService.cs" />
+    <Compile Include="DB\Service\AdmPurAuthgroupService.cs" />
+    <Compile Include="DB\Service\AdmPurAuthgroupuserService.cs" />
+    <Compile Include="DB\Service\AdmPurDemandheadService.cs" />
+    <Compile Include="DB\Service\AdmPurDemanditemService.cs" />
+    <Compile Include="DB\Service\AdmPurOfferheadService.cs" />
+    <Compile Include="DB\Service\AdmPurOfferitemService.cs" />
+    <Compile Include="DB\Service\AdmPurOffervendheadService.cs" />
+    <Compile Include="DB\Service\AdmPurOffervenditemService.cs" />
+    <Compile Include="DB\Service\AdmPurOrderheadService.cs" />
+    <Compile Include="DB\Service\AdmPurOrderitemService.cs" />
+    <Compile Include="DB\Service\AdmQltHeadService.cs" />
+    <Compile Include="DB\Service\AdmQltLineService.cs" />
+    <Compile Include="DB\Service\AdmQltParamitemService.cs" />
+    <Compile Include="DB\Service\AdmQltParamitemspektService.cs" />
+    <Compile Include="DB\Service\AdmQltParamService.cs" />
+    <Compile Include="DB\Service\AdmQltParamvalService.cs" />
+    <Compile Include="DB\Service\AdmRetailSaleitemsService.cs" />
+    <Compile Include="DB\Service\AdmRetailSaleService.cs" />
+    <Compile Include="DB\Service\AdmRouheadService.cs" />
+    <Compile Include="DB\Service\AdmRouitemService.cs" />
+    <Compile Include="DB\Service\AdmRouoprService.cs" />
+    <Compile Include="DB\Service\AdmSalesbudgetService.cs" />
+    <Compile Include="DB\Service\AdmScoringService.cs" />
+    <Compile Include="DB\Service\AdmSettingsService.cs" />
+    <Compile Include="DB\Service\AdmUserDashboardService.cs" />
+    <Compile Include="DB\Service\AdmUserDashsumService.cs" />
+    <Compile Include="DB\Service\AdmUserMenuService.cs" />
+    <Compile Include="DB\Service\AdmUsersService.cs" />
+    <Compile Include="DB\Service\AdmWorkcenterService.cs" />
+    <Compile Include="DB\Service\AdmWorkfowuserService.cs" />
+    <Compile Include="DB\Service\AdmWorkgroupService.cs" />
+    <Compile Include="DB\Service\AdmWorkorderitemsService.cs" />
+    <Compile Include="DB\Service\AdmWorkorderService.cs" />
+    <Compile Include="DB\Service\AdmWorkstationService.cs" />
+    <Compile Include="DB\Service\AdmWorkcenterxService.cs" />
+    <Compile Include="DB\Service\GenelService.cs" />
+    <Compile Include="DB\Service\hazalmenuservice.cs" />
+    <Compile Include="DB\Service\hazalusermenuservice.cs" />
+    <Compile Include="DB\Service\hazaluserservice.cs" />
+    <Compile Include="DB\Service\ServiceBase.cs" />
+    <Compile Include="DB\Model\AdmClcard.cs" />
+    <Compile Include="DB\Repo\AdmClcardRepo.cs" />
+    <Compile Include="DB\Service\AdmClcardService.cs" />
+    <Compile Include="DB\Service\WmsItembarcodeService.cs" />
+    <Compile Include="DB\Service\WmsLocationService.cs" />
+    <Compile Include="DB\Service\WmsMoveficheService.cs" />
+    <Compile Include="DB\Service\WmsMovelineQualityService.cs" />
+    <Compile Include="DB\Service\WmsMovelineService.cs" />
+    <Compile Include="DB\Service\WmsPurorderitemsService.cs" />
+    <Compile Include="DB\Service\WmsPurorderService.cs" />
+    <Compile Include="DB\Service\WmsTempPurorderlineService.cs" />
+    <Compile Include="DB\Service\WmsTempShiporderlineService.cs" />
+    <Compile Include="DB\Service\WmsTransorderheadService.cs" />
+    <Compile Include="DB\Service\WmsTransorderlineService.cs" />
+    <Compile Include="DB\Service\WmsWhcheckheadService.cs" />
+    <Compile Include="DB\Service\WmsWhchecklineService.cs" />
+    <Compile Include="Helper\FrDataSetExtensions.cs" />
+    <Compile Include="LoginHashing.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repo\AdmBiBankaLimitleriRepo.cs" />
+    <Compile Include="Service\AdmBiBankaLimitleriService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DLL\DatabaseLib.dll" />
+    <Content Include="DLL\kk.dll" />
+    <Content Include="DLL\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
+    <Content Include="DLL\Microsoft.Practices.EnterpriseLibrary.Validation.dll" />
+    <Content Include="DLL\Microsoft.Practices.ObjectBuilder2.dll" />
+    <Content Include="DLL\Microsoft.Practices.Unity.dll" />
+    <Content Include="DLL\Newtonsoft.Json.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

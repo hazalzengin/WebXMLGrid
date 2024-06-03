@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.34729.46
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlGridWebApp", "ControlGridWebApp\ControlGridWebApp.csproj", "{0B95098F-2BE9-4018-9AEB-544BC1E729EF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5EA965DD-A68C-4782-B939-80D33D9AC500} = {5EA965DD-A68C-4782-B939-80D33D9AC500}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sistem", "Sistem\Sistem.csproj", "{5EA965DD-A68C-4782-B939-80D33D9AC500}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B95098F-2BE9-4018-9AEB-544BC1E729EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B95098F-2BE9-4018-9AEB-544BC1E729EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B95098F-2BE9-4018-9AEB-544BC1E729EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B95098F-2BE9-4018-9AEB-544BC1E729EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EA965DD-A68C-4782-B939-80D33D9AC500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EA965DD-A68C-4782-B939-80D33D9AC500}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EA965DD-A68C-4782-B939-80D33D9AC500}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EA965DD-A68C-4782-B939-80D33D9AC500}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FC1E636C-3834-452B-9DD4-8DBE72A8DAD9}
+	EndGlobalSection
+EndGlobal
