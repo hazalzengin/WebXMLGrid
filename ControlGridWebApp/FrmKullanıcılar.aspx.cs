@@ -11,6 +11,7 @@ using Sistem.DB.Service;
 using System.Web.UI.WebControls;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Services;
 
 namespace ControlGridWebApp
 {
@@ -31,6 +32,7 @@ namespace ControlGridWebApp
         {
             _userId = int.Parse(Request.QueryString["userId"]);
 
+            Page.ClientScript.RegisterStartupScript(GetType(), "AddColumnToGrid", "function AddColumnToGrid(columnName) { var gridView = $('#Grid').dxDataGrid('instance'); gridView.addColumn(columnName); }", true);
 
             if (!IsPostBack)
             {
@@ -55,8 +57,55 @@ namespace ControlGridWebApp
                 case "SaveItem":
                     SaveGridPropertiesAsXml();
                     break;
+
+                case "RemoveColumn":
+                    RemoveColumn();
+                    break;
+
             }
         }
+        [WebMethod]
+        public static string UpdateGridView(string[] columns)
+        {
+            GridView gridView = new GridView();
+            gridView.AutoGenerateColumns = false;
+
+            foreach (string columnName in columns)
+            {
+                BoundField column = new BoundField();
+                column.DataField = columnName;
+                column.HeaderText = columnName;
+                gridView.Columns.Add(column);
+            }
+
+
+            StringWriter stringWriter = new StringWriter();
+            HtmlTextWriter htmlWriter = new HtmlTextWriter(stringWriter);
+            gridView.RenderControl(htmlWriter);
+
+            return stringWriter.ToString();
+        }
+
+
+        private void RemoveColumn()
+        {
+
+            var column = Grid.VisibleColumns[2];
+            
+                if (column != null)
+                {
+                    column.Visible = false;
+
+                    List<hazaluser> userList = _userService.GetAllUsers();
+                    Grid.DataSource = userList;
+                    Grid.DataBind();
+                }
+                else
+                {
+                    // Handle the case when the column is not found
+                }
+            }
+        
 
         private void SaveGridPropertiesAsXml()
         {
@@ -70,24 +119,33 @@ namespace ControlGridWebApp
 
         private void WriteXML()
         {
-            string xmlFileName = Server.MapPath("~/GridProperties.xml");
-
-            XmlDocument xmlDoc = new XmlDocument();
-            XmlElement root = xmlDoc.CreateElement("GridProperties");
-            xmlDoc.AppendChild(root);
-
-            foreach (GridViewDataColumn column in Grid.VisibleColumns)
+            try
             {
-                XmlElement columnNode = xmlDoc.CreateElement("Column");
-                columnNode.SetAttribute("Name", column.FieldName);
-                columnNode.SetAttribute("Caption", column.Caption);
-                columnNode.SetAttribute("Width", column.Width.ToString());
-                root.AppendChild(columnNode);
+                string xmlFileName = Server.MapPath($"~/GridProperties{_userId}.xml");
+
+                XmlDocument xmlDoc = new XmlDocument();
+                XmlElement root = xmlDoc.CreateElement("GridProperties");
+                xmlDoc.AppendChild(root);
+
+                foreach (GridViewDataColumn column in Grid.Columns)
+                {
+                    XmlElement columnNode = xmlDoc.CreateElement("Column");
+                    columnNode.SetAttribute("Name", column.FieldName);
+                    columnNode.SetAttribute("Caption", column.Caption);
+                    columnNode.SetAttribute("Width", column.Width.ToString());
+                    root.AppendChild(columnNode);
+                }
+
+                xmlDoc.Save(xmlFileName);
+
+                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('XML dosyası başarıyla oluşturuldu.');", true);
             }
-
-            xmlDoc.Save(xmlFileName);
-
+            catch (Exception ex)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('XML dosyası oluşturulurken hata oluştu: " + ex.Message + "');", true);
+            }
         }
+
 
 
         protected void Grid_RowDeleting(object sender, DevExpress.Web.Data.ASPxDataDeletingEventArgs e)
@@ -146,6 +204,30 @@ namespace ControlGridWebApp
                                            .ToList();
         }
 
+        [WebMethod]
+        public static string AddColumnToGrid(string columnName)
+        {
+            var gridView = new ASPxGridView();
+
+            var newColumn = new GridViewDataTextColumn
+            {
+                FieldName = columnName,
+                Caption = columnName,
+                VisibleIndex = gridView.Columns.Count
+            };
+            gridView.Columns.Add(newColumn);
+
+            gridView.DataSource = YourDataSource; 
+            gridView.DataBind();
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                using (HtmlTextWriter htmlWriter = new HtmlTextWriter(stringWriter))
+                {
+                    gridView.RenderControl(htmlWriter);
+                    return stringWriter.ToString();
+                }
+            }
+        }
 
         private void SaveColumnOrder()
         {
@@ -200,36 +282,88 @@ namespace ControlGridWebApp
                     if (result != null && result != DBNull.Value)
                     {
                         string columnOrderString = (string)result;
-                        columnOrder = columnOrderString.Split(',')
-                            .ToList();
+                        columnOrder = columnOrderString.Split(',').ToList();
+                    }
+                    else
+                    {
+                        // Handle if there are no saved column orders
+                        columnOrder = GetDefaultColumnOrder(); // Assuming this method gets the default column order
+                    }
+                }
 
-                        int index = 5;
-                        foreach (string columnName in columnOrder)
-                        {
+                int index = 5;
+                foreach (string columnName in columnOrder)
+                {
+                    string width = GetColumnWidthFromXML(columnName);
 
-                            GridViewDataTextColumn column = new GridViewDataTextColumn();
-                            column.FieldName = columnName;
-                           
-                            column.Caption = columnName;
-                            Grid.Columns[columnName].VisibleIndex = index;
-                            index++;
-                            
-                        }
-
-               
-                        List<hazaluser> userList = _userService.GetAllUsers();
-                        Grid.DataSource = userList;
+                    if (string.IsNullOrEmpty(width))
+                    {
+                        List<hazaluser> userList2 = _userService.GetAllUsers();
+                        Grid.DataSource = userList2;
                         Grid.DataBind();
                     }
                     else
                     {
+                        Grid.Columns[columnName].Width = Unit.Parse(width);
+                        GridViewDataTextColumn column = new GridViewDataTextColumn
+                        {
+                            FieldName = columnName,
+                            Caption = columnName
+                        };
+                       // Grid.Columns.Add(column);
+                        Grid.Columns[columnName].VisibleIndex = index;
+                        index++;
+                        List<hazaluser> userList = _userService.GetAllUsers();
+                        Grid.DataSource = userList;
+                        Grid.DataBind();
                     }
+
+                    
                 }
+
+               
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error occurred: " + ex.Message);
             }
+        }
+
+        private string GetColumnWidthFromXML(string columnName)
+        {
+            try
+            {
+                string xmlFilePath = Server.MapPath($"~/GridProperties{_userId}.xml");
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlFilePath);
+
+                XmlNodeList columnNodes = xmlDoc.GetElementsByTagName("Column");
+                foreach (XmlNode columnNode in columnNodes)
+                {
+                    if (columnNode.Attributes["Name"].Value == columnName)
+                    {
+                        return columnNode.Attributes["Width"].Value;
+                    }
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                
+                Console.WriteLine("XML dosyası bulunamadı.");
+            }
+            catch (Exception ex)
+            {
+               
+                Console.WriteLine("XML dosyası okurken hata verdi: " + ex.Message);
+            }
+
+            return null;
+        }
+
+        private List<string> GetDefaultColumnOrder()
+        {
+            // Define your default column order here
+            return new List<string> { "Column1", "Column2", "Column3" };
         }
 
 

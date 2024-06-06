@@ -1,0 +1,10 @@
+<GridProperties>
+  <Column Name="" Caption="" Width="60px" />
+  <Column Name="" Caption="" Width="60px" />
+  <Column Name="" Caption="" Width="60px" />
+  <Column Name="" Caption="" Width="60px" />
+  <Column Name="Id" Caption="Id" Width="363px" />
+  <Column Name="username" Caption="Kullanıcı Adı" Width="262px" />
+  <Column Name="email" Caption="E-posta" Width="334px" />
+  <Column Name="password" Caption="Parola" Width="129px" />
+</GridProperties>
