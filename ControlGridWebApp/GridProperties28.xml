@@ -1,10 +1,10 @@
 <GridProperties>
-  <Column Name="" Caption="" Width="60px" />
-  <Column Name="" Caption="" Width="60px" />
-  <Column Name="" Caption="" Width="60px" />
-  <Column Name="" Caption="" Width="60px" />
-  <Column Name="Id" Caption="Id" Width="64px" />
-  <Column Name="username" Caption="Kullanıcı Adı" Width="319px" />
-  <Column Name="email" Caption="E-posta" Width="823px" />
-  <Column Name="password" Caption="Parola" Width="777px" />
+  <Column Name="Id" Caption="Id" Width="" VisibleIndex="0" />
+  <Column Name="username" Caption="Kullanıcı Adı" Width="" VisibleIndex="1" />
+  <Column Name="email" Caption="E-posta" Width="" VisibleIndex="2" />
+  <Column Name="password" Caption="Parola" Width="" VisibleIndex="3" />
+  <Column Name="username" Caption="username" Width="" VisibleIndex="4" />
+  <Column Name="email" Caption="email" Width="" VisibleIndex="5" />
+  <Column Name="password" Caption="password" Width="" VisibleIndex="6" />
+  <Column Name="Id" Caption="Id" Width="" VisibleIndex="7" />
 </GridProperties>

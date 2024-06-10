@@ -12,14 +12,12 @@
         <div>
             <h2>Column Selection</h2>
             <div id="available-columns">
-                <!-- List available columns here -->
                 <div class="column-item">Id</div>
                 <div class="column-item">Kullanıcı Adı</div>
                 <div class="column-item">E-posta</div>
                 <div class="column-item">Parola</div>
             </div>
             <div id="selected-columns">
-                <!-- Selected columns will be displayed here -->
             </div>
         </div>
     </form>
