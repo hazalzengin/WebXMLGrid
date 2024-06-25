@@ -1,8 +1,11 @@
 Projede amaç verilmiş olan sütunları sürükleyip bırakarak gridin içine eklenmesini sağlama ve daha sonra sağ tıklayarak bu gridin özelliklerini  xml olarak kaydetmektir.
+
 Bu proje küçük görünse de kapsamlı bir projedir. Projede;
 
 -Kullanıcı giriş sayfası,
+
 -Kullanıcıların görüntülendiği sayfa (Bu sayfada yeni kullanıcı ekleme, kullanıcı silme, kullanıcı bilgilerini güncelleme, kullanıcıya yetki verme ve gride istenen sütunların eklenebilmesini sağlama alanları bulunmaktadır)
+
 -Yetki sayfası
 
 ![image](https://github.com/hazalzengin/WebXMLGrid/assets/141309108/03290023-cdd4-4269-bec0-ee87934757fb)
