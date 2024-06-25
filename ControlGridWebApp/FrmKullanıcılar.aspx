@@ -43,23 +43,26 @@
             <div id="selected-columns" class="droppable-columns">
                 <dx:ASPxGridView ID="Grid" runat="server" KeyFieldName="Id" ClientInstanceName="Grid" SettingsDataSecurity-AllowEdit="True" AutoGenerateColumns="False" Width="100%" EnableTheming="True" Theme="Office365">
                     <ClientSideEvents ContextMenu="function(s, e) { gridPopupMenu.ShowAtPos(e.htmlEvent.clientX, e.htmlEvent.clientY); e.htmlEvent.preventDefault(); }" />
+                    <SettingsPager Visible="False">
+                    </SettingsPager>
                     <SettingsBehavior AllowSelectSingleRowOnly="true" AllowSelectByRowClick="true" ColumnResizeMode="Control" AllowFocusedRow="true" EnableCustomizationWindow="true" ConfirmDelete="true" />
-                    <SettingsDataSecurity AllowEdit="False" AllowInsert="False" />
+                    <SettingsDataSecurity AllowEdit="False" AllowInsert="False" AllowDelete="False" />
                     <SettingsText EmptyHeaders=" " EmptyDataRow=" " />
                     <Columns>
                         <dx:GridViewDataColumn Caption="" VisibleIndex="0" Width="60">
                             <DataItemTemplate>
-                                <dx:ASPxButton ID="btnNew" runat="server" Image-IconID="actions_add_32x32office2013" AutoPostBack="false">
+                                <dx:ASPxButton ID="btnNew" runat="server" Image-IconID="actions_add_32x32office2013" AutoPostBack="true">
                                     <ClientSideEvents Click="function() { popupNewUser.Show(); }" />
                                 </dx:ASPxButton>
                             </DataItemTemplate>
                         </dx:GridViewDataColumn>
- <dx:GridViewDataColumn Caption="" VisibleIndex="1" Width="60">
-    <DataItemTemplate>
-        <dx:ASPxButton ID="btnguncelle" runat="server" Image-IconID="actions_edit_32x32devav"  CommandArgument='<%# Eval("Id") %>' OnClick="btnGuncellePage_Click" AutoPostBack="true">
-        </dx:ASPxButton>
-    </DataItemTemplate>
-</dx:GridViewDataColumn>
+                            <dx:GridViewDataColumn Caption="" VisibleIndex="1" Width="60">
+                            <DataItemTemplate>
+                                <dx:ASPxButton ID="btnNew" runat="server" Image-IconID="actions_edit_32x32devav" AutoPostBack="true">
+                                    <ClientSideEvents Click="function() { popupGuncelle.Show(); }" />
+                                </dx:ASPxButton>
+                            </DataItemTemplate>
+                        </dx:GridViewDataColumn>
         <dx:GridViewDataColumn Caption="" VisibleIndex="2" Width="60">
             <DataItemTemplate>
                 <dx:ASPxButton ID="btnDelete" runat="server" Image-IconID="actions_cancel_32x32" AutoPostBack="true" CommandArgument='<%# Eval("Id") %>' OnClick="btnDelete_Click" />
@@ -70,14 +73,26 @@
                 <dx:ASPxButton ID="btnYetki" runat="server" Image-IconID="xaf_modeleditor_settings_svg_32x32" CommandArgument='<%# Eval("Id") %>' OnClick="btnYetki_Click" />
             </DataItemTemplate>
         </dx:GridViewDataColumn>
-                        <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" VisibleIndex="3" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
+                      <%--  <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" VisibleIndex="3" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
+<HeaderStyle CssClass="custom-grid-header"></HeaderStyle>
+
+<CellStyle CssClass="custom-grid-row"></CellStyle>
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataTextColumn FieldName="username" Caption="Kullanıcı Adı" VisibleIndex="4" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
+<HeaderStyle CssClass="custom-grid-header"></HeaderStyle>
+
+<CellStyle CssClass="custom-grid-row"></CellStyle>
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataTextColumn FieldName="email" Caption="E-posta" VisibleIndex="5" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
+<HeaderStyle CssClass="custom-grid-header"></HeaderStyle>
+
+<CellStyle CssClass="custom-grid-row"></CellStyle>
                         </dx:GridViewDataTextColumn>
                         <dx:GridViewDataTextColumn FieldName="password" Caption="Parola" VisibleIndex="6" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
-                        </dx:GridViewDataTextColumn>
+<HeaderStyle CssClass="custom-grid-header"></HeaderStyle>
+
+<CellStyle CssClass="custom-grid-row"></CellStyle>
+                        </dx:GridViewDataTextColumn>--%>
                     </Columns>
                     <Styles>
                         <Header CssClass="custom-grid-header" />
@@ -123,6 +138,40 @@
                     </dx:PopupControlContentControl>
                 </ContentCollection>
             </dx:ASPxPopupControl>
+            <dx:ASPxPopupControl ID="popupGuncelle" runat="server" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ShowCloseButton="True" ShowFooter="True" Modal="True" Width="400px">
+            <ContentCollection>
+                <dx:PopupControlContentControl runat="server">
+                    <div style="padding: 20px;">
+                        <table width="80%">
+                            <tr>
+                                <td style="padding-bottom: 10px;">Kullanıcı Adı:</td>
+                            </tr>
+                            <tr>
+                                <td><dx:ASPxTextBox ID="editUsername" runat="server" /></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-top: 10px; padding-bottom: 10px;">E-posta:</td>
+                            </tr>
+                            <tr>
+                                <td><dx:ASPxTextBox ID="editEmail" runat="server" /></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-top: 10px; padding-bottom: 10px;">Parola:</td>
+                            </tr>
+                            <tr>
+                                <td><dx:ASPxTextBox ID="editPassword" runat="server" TextMode="Password" /></td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding-top: 20px;">
+                                    <dx:ASPxButton ID="btnUpdateUser" runat="server" Text="Güncelle" AutoPostBack="True" OnClick="btnGuncellePage_Click" />
+                                </td>
+                            </tr>
+                        </table>
+                        <dx:ASPxHiddenField ID="editUserId" runat="server" />
+                    </div>
+                </dx:PopupControlContentControl>
+            </ContentCollection>
+        </dx:ASPxPopupControl>
             <dx:ASPxPopupMenu ID="ASPxPopupMenu1" runat="server" ClientInstanceName="gridPopupMenu" OnItemClick="gridPopupMenu_ItemClick">
                 <Items>
                     <dx:MenuItem Name="SaveItem" Text="Kaydet" />

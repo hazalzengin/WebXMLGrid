@@ -1,0 +1,7 @@
+<GridProperties>
+  <Column Name="username" Caption="username" Width="" VisibleIndex="0" />
+  <Column Name="Id" Caption="Id" Width="" VisibleIndex="1" />
+  <Column Name="email" Caption="email" Width="" VisibleIndex="2" />
+  <Column Name="password" Caption="password" Width="" VisibleIndex="3" />
+  <Column Name="username" Caption="username" Width="" VisibleIndex="4" />
+</GridProperties>

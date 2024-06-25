@@ -1,0 +1,21 @@
+<GridProperties>
+  <Column Name="password" Caption="password" Width="415px" VisibleIndex="0" />
+  <Column Name="Id" Caption="Id" Width="135px" VisibleIndex="1" />
+  <Column Name="username" Caption="username" Width="141px" VisibleIndex="2" />
+  <Column Name="email" Caption="email" Width="245px" VisibleIndex="3" />
+  <Column Name="username" Caption="username" Width="415px" VisibleIndex="4" />
+  <Column Name="email" Caption="email" Width="141px" VisibleIndex="5" />
+</GridProperties>
+
+
+
+UserGridSetting
+
+Userref
+pagename
+gridname
+colname
+colCaption
+colWidth
+colIndex
+colVisibility

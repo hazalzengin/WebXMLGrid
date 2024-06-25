@@ -12,9 +12,6 @@
             <dx:ASPxGridView ID="GridYetki" runat="server" KeyFieldName="Id" AutoGenerateColumns="False" AutoPostBack="true" Width="100%">
                 <Columns>
                     <dx:GridViewCommandColumn ShowSelectCheckbox="True" VisibleIndex="0">
-                        <HeaderTemplate>
-                            <dx:ASPxCheckBox ID="chkBox" runat="server" ClientInstanceName="chkSelectAll" />
-                        </HeaderTemplate>
                     </dx:GridViewCommandColumn>
                     <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" VisibleIndex="2" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
                     </dx:GridViewDataTextColumn>

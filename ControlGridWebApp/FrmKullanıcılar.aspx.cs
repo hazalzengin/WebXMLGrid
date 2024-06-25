@@ -18,39 +18,61 @@ namespace ControlGridWebApp
     public partial class FrmKullanıcılar : Page
     {
         private readonly hazaluserservice _userService;
+        private readonly hazalusermenuservice _usermenuservice;
         public string ConnectionString = @"Data source=HAZAL;Initial Catalog=hazal;Integrated Security=True";
         public int _userId;
         private List<string> _columnOrder;
         public FrmKullanıcılar()
         {
-
+            _usermenuservice = new hazalusermenuservice(ConnectionString);
             _userService = new hazaluserservice(ConnectionString);
 
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            _userId=int.Parse(Request.QueryString["userId"]);
-         
-                if (!IsPostBack)
-                {
-                    FillGridWithUserColumns();
-                }
-                if (Request["__EVENTTARGET"] == "AddColumn")
-                {
-                    string columnName = Request["__EVENTARGUMENT"];
-                    AddColumnToGridView(columnName);
-                }
+            _userId = int.Parse(Request.QueryString["userId"]);
+
+            if (!IsPostBack)
+            {
+                FillGridWithUserColumns();
+                //for(int i = 0; i < 4; i++)
+                //{
+                //    Button btn = new Button();
+                //    btn.ID = "btn_" + i.ToString();
+                //    btn.Width = 60;
+                //    btn.Click += new EventHandler(btn_dlt_Click);
+                //    form1.Controls.Add(btn);
+
+                //}
+
             }
-     
+            if (Request["__EVENTTARGET"] == "AddColumn")
+            {
+                string columnName = Request["__EVENTARGUMENT"];
+                AddColumnToGridView(columnName);
+            }
+        }
+        //protected void btn_dlt_Click(object sender, EventArgs e)
+        //{
+        //    Button btnDelete = sender as Button;
+        //    if (btnDelete != null)
+        //    {
+        //        int userId = Convert.ToInt32(btnDelete.CommandArgument);
+        //        _userService.Sil(userId);
+
+        //        FillGridWithUserColumns();
+        //    }
+        //}
+
         private void AddColumnToGridView(string columnName)
         {
             GridViewDataTextColumn newColumn = new GridViewDataTextColumn();
-            newColumn.FieldName = columnName; 
+            newColumn.FieldName = columnName;
             newColumn.Caption = columnName;
-            Grid.Columns.Add(newColumn); 
-           
+            Grid.Columns.Add(newColumn);
         }
+
 
 
         protected void gridPopupMenu_ItemClick(object source, DevExpress.Web.MenuItemEventArgs e)
@@ -60,11 +82,6 @@ namespace ControlGridWebApp
                 case "SaveItem":
                     SaveGridPropertiesAsXml();
                     break;
-
-                case "RemoveColumn":
-                    RemoveColumn();
-                    break;
-
             }
         }
         //[WebMethod]
@@ -89,36 +106,16 @@ namespace ControlGridWebApp
         //    return stringWriter.ToString();
         //}
 
-
-        private void RemoveColumn()
-        {
-
-            var column = Grid.VisibleColumns[2];
-            
-                if (column != null)
-                {
-                    column.Visible = false;
-
-                    List<hazaluser> userList = _userService.GetAllUsers();
-                    Grid.DataSource = userList;
-                    Grid.DataBind();
-                }
-                else
-                {
-                  
-                }
-            }
-        
-
         private void SaveGridPropertiesAsXml()
         {
-            
+
             UpdateColumnOrder();
             WriteXML();
             ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('kaydedildi');", true);
             SaveColumnOrder();
             ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('kaydedildi');", true);
         }
+
 
         private void WriteXML()
         {
@@ -130,29 +127,21 @@ namespace ControlGridWebApp
                 XmlElement root = xmlDoc.CreateElement("GridProperties");
                 xmlDoc.AppendChild(root);
 
-                int index =0;
-                foreach (GridViewDataColumn column in Grid.Columns)
+                int index = 0;
+                foreach (GridViewDataColumn column in Grid.VisibleColumns)
                 {
-                    if (column.VisibleIndex>2)
+                    if (column.VisibleIndex > 2)
                     {
-
                         XmlElement columnNode = xmlDoc.CreateElement("Column");
                         columnNode.SetAttribute("Name", column.FieldName);
                         columnNode.SetAttribute("Caption", column.Caption);
                         columnNode.SetAttribute("Width", column.Width.ToString());
-                        columnNode.SetAttribute("VisibleIndex", (index).ToString()); 
+                        columnNode.SetAttribute("VisibleIndex", index.ToString());
 
                         root.AppendChild(columnNode);
                         index++;
                     }
-                    else
-                    {
-                        continue;
-                    }
-
-                   
                 }
-
 
                 xmlDoc.Save(xmlFileName);
 
@@ -160,9 +149,10 @@ namespace ControlGridWebApp
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('XML dosyası oluşturulurken hata oluştu: " + ex.Message + "');", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "myalert", $"alert('XML dosyası oluşturulurken hata oluştu: {ex.Message}');", true);
             }
         }
+
 
 
 
@@ -170,9 +160,22 @@ namespace ControlGridWebApp
         protected void btnGuncellePage_Click(object sender, EventArgs e)
         {
             string userId = ((DevExpress.Web.ASPxButton)sender).CommandArgument;
-            Response.Redirect("popuppage.aspx?userId=" + userId);
+            string username = editUsername.Text;
+            string email = editEmail.Text;
+            string password = editPassword.Text;
+            int sonuc = _userService.Guncelle(new hazaluser
+            {
+                Id = _userId,
+                username = username,
+                email = email,
+                password = password
+            });
+            string display = sonuc > 0 ? "Kullanıcı Bilgileri Güncellendi" : "Kullanıcı Eklerken hata oluştu";
+            ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + display + "');", true);
 
         }
+
+
         protected void btnDelete_Click(object sender, EventArgs e)
         {
             ASPxButton btnDelete = sender as ASPxButton;
@@ -209,7 +212,7 @@ namespace ControlGridWebApp
                 string display = "Kullanıcı Eklerken hata oluştu";
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + display + "');", true);
             }
-       
+
 
         }
         private void UpdateColumnOrder()
@@ -220,8 +223,8 @@ namespace ControlGridWebApp
                                            .ToList();
         }
 
-    
-    private void SaveColumnOrder()
+
+        private void SaveColumnOrder()
         {
             try
             {
@@ -231,16 +234,15 @@ namespace ControlGridWebApp
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserId", _userId);
                 object result = command.ExecuteScalar();
-                if (result != null && result != DBNull.Value)
+
+
+                if (result != DBNull.Value)
                 {
                     string updateQuery = "UPDATE grid_user SET Column1 = @Column1 WHERE UserId = @UserId";
                     SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
                     updateCommand.Parameters.AddWithValue("@UserId", _userId);
                     updateCommand.Parameters.AddWithValue("@Column1", string.Join(",", _columnOrder.Skip(4)));
-                    //updateCommand.Parameters.AddWithValue("@Column1", string.Join(",", _columnOrder));
                     updateCommand.ExecuteNonQuery();
-
-
                 }
                 else
                 {
@@ -250,15 +252,11 @@ namespace ControlGridWebApp
                     command2.Parameters.AddWithValue("@Column1", string.Join(",", _columnOrder.Skip(4)));
                     command2.ExecuteNonQuery();
                 }
-
-
-
             }
             catch (Exception ex)
             {
-                
+                ClientScript.RegisterStartupScript(this.GetType(), "myalert", $"alert('XML dosyası oluşturulurken hata oluştu: {ex.Message}');", true);
             }
-
         }
 
 
@@ -275,10 +273,10 @@ namespace ControlGridWebApp
                     xmlDoc.Load(xmlFilePath);
 
 
-                    for (int i = 4; Grid.Columns.Count > i;)
-                    {
-                        Grid.Columns.RemoveAt(i);
-                    }
+                    //for (int i = 4; Grid.Columns.Count > i;)
+                    //{
+                    //    Grid.Columns.RemoveAt(i);
+                    //}
                     XmlNodeList columnNodes = xmlDoc.GetElementsByTagName("Column");
                     foreach (XmlNode columnNode in columnNodes)
                     {
@@ -300,39 +298,51 @@ namespace ControlGridWebApp
                 }
                 else
                 {
+
                     List<string> columnOrder;
                     using (SqlConnection connection = new SqlConnection(ConnectionString))
                     {
                         var result = resultgetir(_userId, connection);
-
-                        if (result != null && result != DBNull.Value)
+                        string columnOrderString = (string)result;
+                        columnOrder = columnOrderString.Split(',').ToList();
+                        foreach (var columnName in columnOrder)
                         {
-                            string columnOrderString = (string)result;
-                            columnOrder = columnOrderString.Split(',').ToList();
+                            Grid.Columns.Add(new GridViewDataTextColumn
+                            {
+                                FieldName = columnName, 
+                                Caption = columnName, 
+                            });
                         }
+
                         List<hazaluser> userList = _userService.GetAllUsers();
                         Grid.DataSource = userList;
                         Grid.DataBind();
                     }
+
                 }
             }
             catch (FileNotFoundException)
             {
+                List<string> columnOrder = new List<string> { "Id", "email", "password", "username" }; 
 
-                List<string> columnOrder;
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
                     var result = resultgetir(_userId, connection);
 
-                    if (result != null && result != DBNull.Value)
+                    foreach (var columnName in columnOrder)
                     {
-                        string columnOrderString = (string)result;
-                        columnOrder = columnOrderString.Split(',').ToList();
+                        Grid.Columns.Add(new GridViewDataTextColumn
+                        {
+                            FieldName = columnName,
+                            Caption = columnName,
+                        });
                     }
+
                     List<hazaluser> userList = _userService.GetAllUsers();
                     Grid.DataSource = userList;
                     Grid.DataBind();
                 }
+
             }
         }
 
@@ -349,8 +359,6 @@ namespace ControlGridWebApp
                 command = new SqlCommand(query, connection);
                 result2 = command.ExecuteScalar();
             }
-
-
 
             return result2;
         }
@@ -383,11 +391,6 @@ namespace ControlGridWebApp
         //        popupGuncelle.ShowOnPageLoad = false;
         //    }
         //}
-
-
-
-
-
         private void ClearPopupFields()
         {
             txtUsername.Text = string.Empty;
@@ -395,8 +398,6 @@ namespace ControlGridWebApp
             txtPassword.Text = string.Empty;
         }
       
-    
-
 
     }
 }
