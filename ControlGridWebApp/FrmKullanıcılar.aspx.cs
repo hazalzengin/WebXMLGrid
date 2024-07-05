@@ -12,11 +12,15 @@ using System.Web.UI.WebControls;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Services;
+using DevExpress.Web.ASPxThemes;
+using DayRenderEventArgs = System.Web.UI.WebControls.DayRenderEventArgs;
 
 namespace ControlGridWebApp
 {
     public partial class FrmKullanıcılar : Page
     {
+        [System.ComponentModel.Bindable(true, System.ComponentModel.BindingDirection.TwoWay)]
+        public DateTime SelectedDate { get; set; }
         private readonly hazaluserservice _userService;
         private readonly hazalusermenuservice _usermenuservice;
         public string ConnectionString = @"Data source=HAZAL;Initial Catalog=hazal;Integrated Security=True";
@@ -28,24 +32,35 @@ namespace ControlGridWebApp
             _userService = new hazaluserservice(ConnectionString);
 
         }
+        protected void Calendar1_DayRender(object sender, DayRenderEventArgs e)
+        {
+            if (lstSelectedDates.Items.FindByValue(e.Day.Date.ToShortDateString()) != null)
+            {
+                e.Cell.BackColor = System.Drawing.Color.Yellow; // veya istenen başka bir renk
+                e.Cell.ForeColor = System.Drawing.Color.Black; // Yazı rengini değiştirmek için
+            }
+        }
+
+        protected void btnApplySelection_Click(object sender, EventArgs e)
+        {
+            foreach (ListItem item in lstSelectedDates.Items)
+            {
+                DateTime selectedDate = DateTime.Parse(item.Value);
+                Calendar1.SelectedDates.Add(selectedDate); // Takvime seçili tarihleri ekle
+            }
+        }
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+           
+
             _userId = int.Parse(Request.QueryString["userId"]);
 
             if (!IsPostBack)
             {
                 FillGridWithUserColumns();
-                //for(int i = 0; i < 4; i++)
-                //{
-                //    Button btn = new Button();
-                //    btn.ID = "btn_" + i.ToString();
-                //    btn.Width = 60;
-                //    btn.Click += new EventHandler(btn_dlt_Click);
-                //    form1.Controls.Add(btn);
-
-                //}
-
             }
             if (Request["__EVENTTARGET"] == "AddColumn")
             {
@@ -53,17 +68,7 @@ namespace ControlGridWebApp
                 AddColumnToGridView(columnName);
             }
         }
-        //protected void btn_dlt_Click(object sender, EventArgs e)
-        //{
-        //    Button btnDelete = sender as Button;
-        //    if (btnDelete != null)
-        //    {
-        //        int userId = Convert.ToInt32(btnDelete.CommandArgument);
-        //        _userService.Sil(userId);
 
-        //        FillGridWithUserColumns();
-        //    }
-        //}
 
         private void AddColumnToGridView(string columnName)
         {
@@ -84,27 +89,7 @@ namespace ControlGridWebApp
                     break;
             }
         }
-        //[WebMethod]
-        //public static string UpdateGridView(string[] columns)
-        //{
-        //    GridView gridView = new GridView();
-        //    gridView.AutoGenerateColumns = false;
 
-        //    foreach (string columnName in columns)
-        //    {
-        //        BoundField column = new BoundField();
-        //        column.DataField = columnName;
-        //        column.HeaderText = columnName;
-        //        gridView.Columns.Add(column);
-        //    }
-
-
-        //    StringWriter stringWriter = new StringWriter();
-        //    HtmlTextWriter htmlWriter = new HtmlTextWriter(stringWriter);
-        //    gridView.RenderControl(htmlWriter);
-
-        //    return stringWriter.ToString();
-        //}
 
         private void SaveGridPropertiesAsXml()
         {
@@ -174,6 +159,31 @@ namespace ControlGridWebApp
             ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + display + "');", true);
 
         }
+        protected void btnFirstGrid_Click(object sender, EventArgs e)
+        {
+            List<string> columnOrder = new List<string> { "Id", "email", "password", "username" };
+            for (int i = Grid.Columns.Count - 4; i >= 0; i--)
+            {
+                if (columnOrder.Contains(Grid.Columns[i].Caption))
+                {
+                    Grid.Columns.RemoveAt(i);
+                }
+            }
+
+            foreach (var columnName in columnOrder)
+            {
+                GridViewDataTextColumn newColumn = new GridViewDataTextColumn();
+                newColumn.FieldName = columnName;
+                newColumn.Caption = columnName;
+                Grid.Columns.Add(newColumn);
+            }
+            List<hazaluser> userList = _userService.GetAllUsers();
+            Grid.DataSource = userList;
+            Grid.DataBind();
+        }
+
+       
+
 
 
         protected void btnDelete_Click(object sender, EventArgs e)
@@ -297,8 +307,8 @@ namespace ControlGridWebApp
                     Grid.DataBind();
                 }
                 else
-                {
 
+                {
                     List<string> columnOrder;
                     using (SqlConnection connection = new SqlConnection(ConnectionString))
                     {
@@ -309,8 +319,8 @@ namespace ControlGridWebApp
                         {
                             Grid.Columns.Add(new GridViewDataTextColumn
                             {
-                                FieldName = columnName, 
-                                Caption = columnName, 
+                                FieldName = columnName,
+                                Caption = columnName,
                             });
                         }
 
@@ -323,7 +333,7 @@ namespace ControlGridWebApp
             }
             catch (FileNotFoundException)
             {
-                List<string> columnOrder = new List<string> { "Id", "email", "password", "username" }; 
+                List<string> columnOrder = new List<string> { "Id", "email", "password", "username" };
 
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
@@ -397,7 +407,7 @@ namespace ControlGridWebApp
             txtEmail.Text = string.Empty;
             txtPassword.Text = string.Empty;
         }
-      
+
 
     }
 }

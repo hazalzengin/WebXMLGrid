@@ -1,7 +1,0 @@
-<GridProperties>
-  <Column Name="username" Caption="username" Width="225px" VisibleIndex="0" />
-  <Column Name="Id" Caption="Id" Width="196px" VisibleIndex="1" />
-  <Column Name="email" Caption="email" Width="114px" VisibleIndex="2" />
-  <Column Name="password" Caption="password" Width="121px" VisibleIndex="3" />
-  <Column Name="email" Caption="email" Width="221px" VisibleIndex="4" />
-</GridProperties>
