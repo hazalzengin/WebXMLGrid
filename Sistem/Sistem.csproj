@@ -34,6 +34,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Data.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpo.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="kk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL\kk.dll</HintPath>
@@ -216,6 +218,7 @@
     <Compile Include="DB\Model\AdmWorkorderitems.cs" />
     <Compile Include="DB\Model\AdmWorkstation.cs" />
     <Compile Include="DB\Model\AdmWorkcenterx.cs" />
+    <Compile Include="DB\Model\events.cs" />
     <Compile Include="DB\Model\hazalmenu.cs" />
     <Compile Include="DB\Model\hazaluser.cs" />
     <Compile Include="DB\Model\hazalusermenu.cs" />
@@ -383,6 +386,7 @@
     <Compile Include="DB\Repo\AdmWorkstationRepo.cs" />
     <Compile Include="DB\Repo\AdmWorkcenterxRepo.cs" />
     <Compile Include="DB\Repo\BaseRepository.cs" />
+    <Compile Include="DB\Repo\eventsrepo.cs" />
     <Compile Include="DB\Repo\GenelRepo.cs" />
     <Compile Include="DB\Repo\hazalmenurepo.cs" />
     <Compile Include="DB\Repo\hazalusermenurepo.cs" />
@@ -550,6 +554,7 @@
     <Compile Include="DB\Service\AdmWorkorderService.cs" />
     <Compile Include="DB\Service\AdmWorkstationService.cs" />
     <Compile Include="DB\Service\AdmWorkcenterxService.cs" />
+    <Compile Include="DB\Service\eventsservice.cs" />
     <Compile Include="DB\Service\GenelService.cs" />
     <Compile Include="DB\Service\hazalmenuservice.cs" />
     <Compile Include="DB\Service\hazalusermenuservice.cs" />

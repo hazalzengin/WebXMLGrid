@@ -14,14 +14,17 @@ using System.Linq;
 using System.Web.Services;
 using DevExpress.Web.ASPxThemes;
 using DayRenderEventArgs = System.Web.UI.WebControls.DayRenderEventArgs;
+using System.Configuration;
+using System.Web.Script.Services;
 
 namespace ControlGridWebApp
 {
     public partial class FrmKullanıcılar : Page
     {
-        [System.ComponentModel.Bindable(true, System.ComponentModel.BindingDirection.TwoWay)]
-        public DateTime SelectedDate { get; set; }
+     
+      
         private readonly hazaluserservice _userService;
+        private readonly eventsservice _eventsservice;
         private readonly hazalusermenuservice _usermenuservice;
         public string ConnectionString = @"Data source=HAZAL;Initial Catalog=hazal;Integrated Security=True";
         public int _userId;
@@ -32,29 +35,48 @@ namespace ControlGridWebApp
             _userService = new hazaluserservice(ConnectionString);
 
         }
-        protected void Calendar1_DayRender(object sender, DayRenderEventArgs e)
+        public void AddNoteToDatabase(string noteText, DateTime noteDate)
         {
-            if (lstSelectedDates.Items.FindByValue(e.Day.Date.ToShortDateString()) != null)
+             int sonuc = _eventsservice.Ekle(new events
             {
-                e.Cell.BackColor = System.Drawing.Color.Yellow; // veya istenen başka bir renk
-                e.Cell.ForeColor = System.Drawing.Color.Black; // Yazı rengini değiştirmek için
-            }
+                startday = txtUsername.Text,
+                enddate = txtEmail.Text,
+                Events = txtPassword.Text
+            });
+        }
+        public void ShowEvents()
+        {
+           
+
+            List<events> events = _eventsservice.GetAllUsers();
+           
+          
+             
+        }
+        private void AddNewEvent(DateTime start, DateTime end, string eventName)
+        {
+
+            int newEvent = _eventsservice.Ekle(new events
+            {
+                startday = start.ToLongDateString(),
+                enddate = end.ToLongDateString(),
+                Events = eventName
+            });
+
+            SqlDataSource3.InsertParameters["startday"].DefaultValue = start.ToString();
+            SqlDataSource3.InsertParameters["enddate"].DefaultValue = end.ToString();
+            SqlDataSource3.InsertParameters["event"].DefaultValue = eventName;
+
+            SqlDataSource3.Insert();
         }
 
-        protected void btnApplySelection_Click(object sender, EventArgs e)
-        {
-            foreach (ListItem item in lstSelectedDates.Items)
-            {
-                DateTime selectedDate = DateTime.Parse(item.Value);
-                Calendar1.SelectedDates.Add(selectedDate); // Takvime seçili tarihleri ekle
-            }
-        }
+      
 
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
            
+
 
             _userId = int.Parse(Request.QueryString["userId"]);
 
@@ -78,6 +100,7 @@ namespace ControlGridWebApp
             Grid.Columns.Add(newColumn);
         }
 
+     
 
 
         protected void gridPopupMenu_ItemClick(object source, DevExpress.Web.MenuItemEventArgs e)

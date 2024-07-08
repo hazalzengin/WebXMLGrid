@@ -24,31 +24,31 @@ namespace ControlGridWebApp
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// Calendar1 control.
+        /// ASPxScheduler1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Calendar Calendar1;
+        protected global::DevExpress.Web.ASPxScheduler.ASPxScheduler ASPxScheduler1;
 
         /// <summary>
-        /// lstSelectedDates control.
+        /// SqlDataSource3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox lstSelectedDates;
+        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource3;
 
         /// <summary>
-        /// btnApplySelection control.
+        /// ASPxDateNavigator1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnApplySelection;
+        protected global::DevExpress.Web.ASPxScheduler.ASPxDateNavigator ASPxDateNavigator1;
 
         /// <summary>
         /// btnFirstGrid control.

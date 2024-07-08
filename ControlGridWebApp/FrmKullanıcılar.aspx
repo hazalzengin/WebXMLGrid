@@ -1,6 +1,12 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="FrmKullanıcılar.aspx.cs" Inherits="ControlGridWebApp.FrmKullanıcılar" %>
 
+<%@ Register Assembly="DevExpress.Web.ASPxScheduler.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxScheduler" TagPrefix="dxwschs" %>
+
 <%@ Register Assembly="DevExpress.Web.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web" TagPrefix="dx" %>
+
+
+
+<%@ Register assembly="DevExpress.XtraScheduler.v19.1.Core, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" namespace="DevExpress.XtraScheduler" tagprefix="cc1" %>
 
 
 
@@ -38,28 +44,95 @@
 
 </script>  
 
+    <style type="text/css">
+        .auto-style1 {
+            width: 951px;
+        }
+        </style>
+
 </head>
 <body>
     <form id="form1" runat="server">
-      
-         <asp:Calendar ID="Calendar1" runat="server"   Font-Names="Verdana"  OnDayRender="Calendar1_DayRender"
-BackColor="White"   BorderColor="Black"   BorderStyle="Solid"   CellSpacing="1"   Font-Size="9pt"
-ForeColor="Black"   Height="250px"   NextPrevFormat="ShortMonth">
-    <SelectedDayStyle BackColor="#333399" ForeColor="White" />
-    <TodayDayStyle BackColor="#999999" ForeColor="White" />
-    <OtherMonthDayStyle ForeColor="#999999" />
-    <DayStyle BackColor="#CCCCCC" Height="50px" Width="100px" />
-    <NextPrevStyle Font-Bold="True" Font-Size="8pt" ForeColor="White" />
-    <DayHeaderStyle Font-Bold="True" Font-Size="8pt" ForeColor="#333333" Height="8pt" />
-    <TitleStyle BackColor="#333399" BorderStyle="Solid" Font-Bold="True" Font-Size="12pt" ForeColor="White" Height="12pt" />
-</asp:Calendar>
-        <asp:ListBox ID="lstSelectedDates" runat="server" SelectionMode="Multiple"></asp:ListBox>
-<br />
-        <asp:Button ID="btnApplySelection" runat="server" Text="Seçili Günleri Uygula" OnClick="btnApplySelection_Click" />
-
         <div>
             
-            <h2>Kullanıcılar</h2>
+            <h2>
+                <table class="dxflInternalEditorTable_Office365">
+                    <tr>
+                        <td class="auto-style1">
+                            <dxwschs:ASPxScheduler ID="ASPxScheduler1" runat="server"  ClientIDMode="AutoID" Start="2024-07-08" Theme="Office365" Width="1200px" AppointmentDataSourceID="SqlDataSource3" ResourceDataSourceID="SqlDataSource3">
+                                <Views>
+<DayView ViewSelectorItemAdaptivePriority="2"><TimeRulers>
+<cc1:TimeRuler></cc1:TimeRuler>
+</TimeRulers>
+
+<AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
+</DayView>
+
+<WorkWeekView ViewSelectorItemAdaptivePriority="6"><TimeRulers>
+<cc1:TimeRuler></cc1:TimeRuler>
+</TimeRulers>
+
+<AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
+</WorkWeekView>
+
+                                    <WeekView Enabled="false">
+                                    </WeekView>
+
+<MonthView ViewSelectorItemAdaptivePriority="5"></MonthView>
+
+<TimelineView ViewSelectorItemAdaptivePriority="3"></TimelineView>
+
+                                    <FullWeekView Enabled="true">
+                                        <TimeRulers>
+<cc1:TimeRuler></cc1:TimeRuler>
+</TimeRulers>
+
+<AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
+                                    </FullWeekView>
+
+<AgendaView ViewSelectorItemAdaptivePriority="1"></AgendaView>
+                                </Views>
+                                <Storage>
+                                    <Appointments AutoRetrieveId="True">
+                                        <Mappings AppointmentId="id" Description="notes" End="enddate" ResourceId="event" Start="startday" Subject="subject" Type="userid" />
+                                    </Appointments>
+                                    <Resources>
+                                        <Mappings Caption="subject" ResourceId="id" />
+                                    </Resources>
+                                </Storage>
+                            </dxwschs:ASPxScheduler>
+                            <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:hazalConnectionString3 %>" DeleteCommand="DELETE FROM [events] WHERE [id] = @id" InsertCommand="INSERT INTO [events] ([enddate], [startday], [event], [notes], [userid], [subject]) VALUES (@enddate, @startday, @event, @notes, @userid, @subject)" SelectCommand="SELECT [id], [enddate], [startday], [event], [notes], [userid], [subject] FROM [events]" UpdateCommand="UPDATE [events] SET [enddate] = @enddate, [startday] = @startday, [event] = @event, [notes] = @notes, [userid] = @userid, [subject] = @subject WHERE [id] = @id">
+                                <DeleteParameters>
+                                    <asp:Parameter Name="id" Type="Int32" />
+                                </DeleteParameters>
+                                <InsertParameters>
+                                    <asp:Parameter Name="enddate" Type="DateTime" />
+                                    <asp:Parameter Name="startday" Type="DateTime" />
+                                    <asp:Parameter Name="event" Type="String" />
+                                    <asp:Parameter Name="notes" Type="String" />
+                                    <asp:Parameter Name="userid" Type="Int32" />
+                                    <asp:Parameter Name="subject" Type="String" />
+                                </InsertParameters>
+                                <UpdateParameters>
+                                    <asp:Parameter Name="enddate" Type="DateTime" />
+                                    <asp:Parameter Name="startday" Type="DateTime" />
+                                    <asp:Parameter Name="event" Type="String" />
+                                    <asp:Parameter Name="notes" Type="String" />
+                                    <asp:Parameter Name="userid" Type="Int32" />
+                                    <asp:Parameter Name="subject" Type="String" />
+                                    <asp:Parameter Name="id" Type="Int32" />
+                                </UpdateParameters>
+                            </asp:SqlDataSource>
+                        </td>
+                        <td>
+                            <dxwschs:ASPxDateNavigator ID="ASPxDateNavigator1" runat="server" ClientIDMode="AutoID" MasterControlID="ASPxScheduler1" Width="600px">
+                                <Properties Rows="5">
+                                </Properties>
+                            </dxwschs:ASPxDateNavigator>
+                        </td>
+                    </tr>
+                </table>
+                Kullanıcılar</h2>
             <div id="available-columns" class="draggable-columns">
                 <div class="column-item">Id</div>
                 <div class="column-item">username</div>
