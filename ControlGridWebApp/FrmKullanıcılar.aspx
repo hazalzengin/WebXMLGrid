@@ -48,6 +48,10 @@
         .auto-style1 {
             width: 951px;
         }
+
+        .dxwschsTimeRuler {
+    display: none;
+}
         </style>
 
 </head>
@@ -59,48 +63,6 @@
                 <table class="dxflInternalEditorTable_Office365">
                     <tr>
                         <td class="auto-style1">
-                            <dxwschs:ASPxScheduler ID="ASPxScheduler1" runat="server"  ClientIDMode="AutoID" Start="2024-07-08" Theme="Office365" Width="1200px" AppointmentDataSourceID="SqlDataSource3" ResourceDataSourceID="SqlDataSource3">
-                                <Views>
-<DayView ViewSelectorItemAdaptivePriority="2"><TimeRulers>
-<cc1:TimeRuler></cc1:TimeRuler>
-</TimeRulers>
-
-<AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
-</DayView>
-
-<WorkWeekView ViewSelectorItemAdaptivePriority="6"><TimeRulers>
-<cc1:TimeRuler></cc1:TimeRuler>
-</TimeRulers>
-
-<AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
-</WorkWeekView>
-
-                                    <WeekView Enabled="false">
-                                    </WeekView>
-
-<MonthView ViewSelectorItemAdaptivePriority="5"></MonthView>
-
-<TimelineView ViewSelectorItemAdaptivePriority="3"></TimelineView>
-
-                                    <FullWeekView Enabled="true">
-                                        <TimeRulers>
-<cc1:TimeRuler></cc1:TimeRuler>
-</TimeRulers>
-
-<AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
-                                    </FullWeekView>
-
-<AgendaView ViewSelectorItemAdaptivePriority="1"></AgendaView>
-                                </Views>
-                                <Storage>
-                                    <Appointments AutoRetrieveId="True">
-                                        <Mappings AppointmentId="id" Description="notes" End="enddate" ResourceId="event" Start="startday" Subject="subject" Type="userid" />
-                                    </Appointments>
-                                    <Resources>
-                                        <Mappings Caption="subject" ResourceId="id" />
-                                    </Resources>
-                                </Storage>
-                            </dxwschs:ASPxScheduler>
                             <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:hazalConnectionString3 %>" DeleteCommand="DELETE FROM [events] WHERE [id] = @id" InsertCommand="INSERT INTO [events] ([enddate], [startday], [event], [notes], [userid], [subject]) VALUES (@enddate, @startday, @event, @notes, @userid, @subject)" SelectCommand="SELECT [id], [enddate], [startday], [event], [notes], [userid], [subject] FROM [events]" UpdateCommand="UPDATE [events] SET [enddate] = @enddate, [startday] = @startday, [event] = @event, [notes] = @notes, [userid] = @userid, [subject] = @subject WHERE [id] = @id">
                                 <DeleteParameters>
                                     <asp:Parameter Name="id" Type="Int32" />
@@ -123,11 +85,66 @@
                                     <asp:Parameter Name="id" Type="Int32" />
                                 </UpdateParameters>
                             </asp:SqlDataSource>
+                            <dxwschs:ASPxScheduler  ID="ASPxScheduler1" runat="server"   Images-Appointment-Recurrence-Height="1000" AppointmentDataSourceID="SqlDataSource3"  ClientIDMode="AutoID" ResourceDataSourceID="SqlDataSource3" Start="2024-07-09" Theme="Office365" EnableCallbackCompression="False" Font-Strikeout="False" ForeColor="Black">
+                                <Views>
+<DayView ViewSelectorItemAdaptivePriority="2" ShowWorkTimeOnly="True">
+
+    <TimeRulers>
+        <cc1:TimeRuler Visible="False" />
+    </TimeRulers>
+
+<AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
+</DayView>
+
+<WorkWeekView ViewSelectorItemAdaptivePriority="6" ShowAllAppointmentsAtTimeCells="True" ShowWorkTimeOnly="True">
+
+    <TimeRulers>
+<cc1:TimeRuler Visible="False"></cc1:TimeRuler>
+</TimeRulers>
+
+<AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4" SnapToCellsMode="Disabled"></AppointmentDisplayOptions>
+</WorkWeekView>
+                                    <WeekView Enabled="true">
+                                    </WeekView>
+<MonthView ViewSelectorItemAdaptivePriority="5"></MonthView>
+
+<TimelineView ViewSelectorItemAdaptivePriority="3"></TimelineView>
+
+                                    <FullWeekView Enabled="true">
+
+                                        <TimeRulers>
+<cc1:TimeRuler Visible="False"></cc1:TimeRuler>
+</TimeRulers>
+
+<AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
+                                    </FullWeekView>
+
+<AgendaView ViewSelectorItemAdaptivePriority="1"></AgendaView>
+                                </Views>
+
+<Images>
+<Appointment>
+<Recurrence Height="1000px"></Recurrence>
+</Appointment>
+</Images>
+
+                                <OptionsBehavior HighlightSelectionHeaders="True" />
+                                <OptionsMenu EnableMenuScrolling="True" />
+                                <OptionsView ResourceColorFillArea="ResourceHeader">
+                                </OptionsView>
+                                <Storage EnableReminders="False" EnableSmartFetch="False" EnableTimeZones="False" TimeZoneId="Turkey Standard Time">
+                                    <Appointments AutoRetrieveId="True">
+                                        <Mappings AppointmentId="id" Description="notes" End="enddate" ResourceId="event" Start="startday" Subject="subject" Type="userid" />
+                                    </Appointments>
+                                    <Resources AutoReload="False">
+                                        <Mappings Caption="event" ResourceId="id" />
+                                    </Resources>
+                                </Storage>
+                                 
+                            </dxwschs:ASPxScheduler>
                         </td>
                         <td>
                             <dxwschs:ASPxDateNavigator ID="ASPxDateNavigator1" runat="server" ClientIDMode="AutoID" MasterControlID="ASPxScheduler1" Width="600px">
-                                <Properties Rows="5">
-                                </Properties>
                             </dxwschs:ASPxDateNavigator>
                         </td>
                     </tr>
