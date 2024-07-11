@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="FrmKullanıcılar.aspx.cs" Inherits="ControlGridWebApp.FrmKullanıcılar" %>
+﻿<%@ Page  Async="true" Language="C#" AutoEventWireup="true" CodeBehind="FrmKullanıcılar.aspx.cs" Inherits="ControlGridWebApp.FrmKullanıcılar" %>
 
 <%@ Register Assembly="DevExpress.Web.ASPxScheduler.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxScheduler" TagPrefix="dxwschs" %>
 
@@ -52,15 +52,20 @@
         .dxwschsTimeRuler {
     display: none;
 }
+        .auto-style2 {
+            width: 100%;
+            height: 544px;
+        }
         </style>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 </head>
 <body>
     <form id="form1" runat="server">
+
         <div>
             
             <h2>
-                <table class="dxflInternalEditorTable_Office365">
+                <table class="auto-style2">
                     <tr>
                         <td class="auto-style1">
                             <asp:SqlDataSource ID="SqlDataSource3" runat="server" ConnectionString="<%$ ConnectionStrings:hazalConnectionString3 %>" DeleteCommand="DELETE FROM [events] WHERE [id] = @id" InsertCommand="INSERT INTO [events] ([enddate], [startday], [event], [notes], [userid], [subject]) VALUES (@enddate, @startday, @event, @notes, @userid, @subject)" SelectCommand="SELECT [id], [enddate], [startday], [event], [notes], [userid], [subject] FROM [events]" UpdateCommand="UPDATE [events] SET [enddate] = @enddate, [startday] = @startday, [event] = @event, [notes] = @notes, [userid] = @userid, [subject] = @subject WHERE [id] = @id">
@@ -85,12 +90,12 @@
                                     <asp:Parameter Name="id" Type="Int32" />
                                 </UpdateParameters>
                             </asp:SqlDataSource>
-                            <dxwschs:ASPxScheduler  ID="ASPxScheduler1" runat="server"   Images-Appointment-Recurrence-Height="1000" AppointmentDataSourceID="SqlDataSource3"  ClientIDMode="AutoID" ResourceDataSourceID="SqlDataSource3" Start="2024-07-09" Theme="Office365" EnableCallbackCompression="False" Font-Strikeout="False" ForeColor="Black">
+                            <dxwschs:ASPxScheduler  ID="ASPxScheduler1" runat="server"   Images-Appointment-Recurrence-Height="1000" AppointmentDataSourceID="SqlDataSource3"  ClientIDMode="AutoID" ResourceDataSourceID="SqlDataSource3" Start="2024-07-09" Theme="Office365" EnableCallbackCompression="False" Font-Strikeout="False" ForeColor="Black" Width="1071px">
                                 <Views>
-<DayView ViewSelectorItemAdaptivePriority="2" ShowWorkTimeOnly="True">
+<DayView ViewSelectorItemAdaptivePriority="2" ShowWorkTimeOnly="True" VisibleTimeSnapMode="True">
 
     <TimeRulers>
-        <cc1:TimeRuler Visible="False" />
+        <cc1:TimeRuler Visible="True" />
     </TimeRulers>
 
 <AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
@@ -99,7 +104,7 @@
 <WorkWeekView ViewSelectorItemAdaptivePriority="6" ShowAllAppointmentsAtTimeCells="True" ShowWorkTimeOnly="True">
 
     <TimeRulers>
-<cc1:TimeRuler Visible="False"></cc1:TimeRuler>
+<cc1:TimeRuler Visible="True"></cc1:TimeRuler>
 </TimeRulers>
 
 <AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4" SnapToCellsMode="Disabled"></AppointmentDisplayOptions>
@@ -110,10 +115,10 @@
 
 <TimelineView ViewSelectorItemAdaptivePriority="3"></TimelineView>
 
-                                    <FullWeekView Enabled="true">
+                                    <FullWeekView Enabled="true" VisibleTimeSnapMode="True">
 
                                         <TimeRulers>
-<cc1:TimeRuler Visible="False"></cc1:TimeRuler>
+<cc1:TimeRuler Visible="True"></cc1:TimeRuler>
 </TimeRulers>
 
 <AppointmentDisplayOptions ColumnPadding-Left="2" ColumnPadding-Right="4"></AppointmentDisplayOptions>
@@ -121,6 +126,10 @@
 
 <AgendaView ViewSelectorItemAdaptivePriority="1"></AgendaView>
                                 </Views>
+                                <Styles>
+                                    <FormEditors ButtonEditCellSpacing="10">
+                                    </FormEditors>
+                                </Styles>
 
 <Images>
 <Appointment>
@@ -129,9 +138,12 @@
 </Images>
 
                                 <OptionsBehavior HighlightSelectionHeaders="True" />
+                                <OptionsForms RecurrentAppointmentEditFormTemplateUrl="~/FrmKullanıcılar.aspx" />
+                                <OptionsToolTips AppointmentToolTipCornerType="Rounded" />
                                 <OptionsMenu EnableMenuScrolling="True" />
                                 <OptionsView ResourceColorFillArea="ResourceHeader">
                                 </OptionsView>
+                                <OptionsLoadingPanel ImagePosition="Top" />
                                 <Storage EnableReminders="False" EnableSmartFetch="False" EnableTimeZones="False" TimeZoneId="Turkey Standard Time">
                                     <Appointments AutoRetrieveId="True">
                                         <Mappings AppointmentId="id" Description="notes" End="enddate" ResourceId="event" Start="startday" Subject="subject" Type="userid" />
@@ -156,8 +168,33 @@
                 <div class="column-item">email</div>
                 <div class="column-item">password</div>
             </div>
-            <dx:ASPxButton  ID="btnFirstGrid" runat="server" Image-IconID="actions_changeview_32x32devav"  OnClick="btnFirstGrid_Click"></dx:ASPxButton>
+             <div class="card-body">
 
+                    <div class="example-code mb-10">
+                        <div class="example-highlight">
+                            <div class="form-group row">
+
+                                <div class="col-md-2 col-sm-6">
+                                    <span class="form-text text-bold">Başlangıç Tarihi</span>
+                                    <dx:ASPxDateEdit runat="server" ID="txtSearchStartdate" CssClass="form-control form-control-sm" DisplayFormatString="yyyy-MM-dd" EditFormatString="dd.MM.yyyy"></dx:ASPxDateEdit>
+                                </div>
+
+                                <div class="col-md-2 col-sm-6">
+                                    <span class="form-text text-bold">Bitiş Tarihi</span>
+                                    <dx:ASPxDateEdit runat="server" ID="txtSearchEnddate" CssClass="form-control form-control-sm" DisplayFormatString="yyyy-MM-dd" EditFormatString="dd.MM.yyyy"></dx:ASPxDateEdit>
+                                </div>
+                                <div class="col-md-2 col-sm-6">
+                                        <ContentTemplate>
+                                            <dx:ASPxButton ID="btnSearch" ClientIDMode="Static" CssClass="btn btn-sm btn-light-success font-weight-bolder mt-4 mr-3" runat="server" Image-IconID="actions_search_16x16devav" EnableViewState="False" OnClick="FilterChanged" AutoPostBack="true" Text="Ara"></dx:ASPxButton>
+                                        </ContentTemplate>
+                                </div>
+
+                               
+                            </div>
+                        </div>
+                    </div>
+            <dx:ASPxGridView ID="GridFatura" runat="server" AutoPostBack="true"></dx:ASPxGridView>
+            <dx:ASPxButton  ID="btnFirstGrid" runat="server" Image-IconID="actions_changeview_32x32devav"  OnClick="btnFirstGrid_Click"></dx:ASPxButton>
             <div id="selected-columns" class="droppable-columns">
                 <dx:ASPxGridView ID="Grid" runat="server" KeyFieldName="Id" ClientInstanceName="Grid" SettingsDataSecurity-AllowEdit="True" AutoGenerateColumns="False" Width="100%" EnableTheming="True" Theme="Office365">
                     <ClientSideEvents ContextMenu="function(s, e) { gridPopupMenu.ShowAtPos(e.htmlEvent.clientX, e.htmlEvent.clientY); e.htmlEvent.preventDefault(); }" />
@@ -167,30 +204,20 @@
                     <SettingsDataSecurity AllowEdit="False" AllowInsert="False" AllowDelete="False" />
                     <SettingsText EmptyHeaders=" " EmptyDataRow=" " />
                     <Columns>
-                        <dx:GridViewDataColumn Caption="" VisibleIndex="0" Width="60">
+                        <dx:GridViewDataColumn Caption="" VisibleIndex="0" Width="150">
                             <DataItemTemplate>
-                                <dx:ASPxButton ID="btnNew" runat="server" FixedStyle="Left" Image-IconID="actions_add_32x32office2013" AutoPostBack="true">
-                                    <ClientSideEvents Click="function() { popupNewUser.Show(); }" />
-                                </dx:ASPxButton>
+                                <asp:LinkButton ID="btnNew" runat="server" AutoPostBack="true" OnClientClick="popupNewUser.Show()"> <i class="fa fa-plus" style="font-size:28px;color:black"></i>
+                                    </asp:LinkButton>
+                                  <asp:LinkButton ID="btnGuncelle" runat="server" FixedStyle="Left" OnClientClick=" popupGuncelle.Show()" AutoPostBack="true"><%--<i class="fa fa-edit"--%> <i class="fa fa-refresh fa-spin" style="font-size:28px;color:black"></i>
+                                </asp:LinkButton>
+                                <asp:LinkButton ID="btnDelete" runat="server" FixedStyle="Left" CommandArgument='<%# Eval("Id") %>' OnClick="btnDelete_Click" AutoPostBack="true">
+    <i class="fa fa-trash-o" style="font-size:28px;color:black"></i>
+</asp:LinkButton>
+            <asp:LinkButton ID="btnYetki" runat="server" FixedStyle="Left" CommandArgument='<%# Eval("Id") %>' OnClick="btnYetki_Click" AutoPostBack="true">
+    <i class="fa fa-cog fa-spin" style="font-size:28px;color:black"></i>
+</asp:LinkButton>
                             </DataItemTemplate>
                         </dx:GridViewDataColumn>
-                            <dx:GridViewDataColumn Caption="" VisibleIndex="1" Width="60">
-                            <DataItemTemplate>
-                                <dx:ASPxButton ID="btnNew" runat="server" Image-IconID="actions_edit_32x32devav" AutoPostBack="true">
-                                    <ClientSideEvents Click="function() { popupGuncelle.Show(); }" />
-                                </dx:ASPxButton>
-                            </DataItemTemplate>
-                        </dx:GridViewDataColumn>
-        <dx:GridViewDataColumn Caption="" VisibleIndex="2" Width="60">
-            <DataItemTemplate>
-                <dx:ASPxButton ID="btnDelete" runat="server" Image-IconID="actions_cancel_32x32" AutoPostBack="true" CommandArgument='<%# Eval("Id") %>' OnClick="btnDelete_Click" />
-            </DataItemTemplate>
-        </dx:GridViewDataColumn>
-         <dx:GridViewDataColumn Caption="" VisibleIndex="2" Width="60">
-            <DataItemTemplate>
-                <dx:ASPxButton ID="btnYetki" runat="server" Image-IconID="xaf_modeleditor_settings_svg_32x32" CommandArgument='<%# Eval("Id") %>' OnClick="btnYetki_Click" />
-            </DataItemTemplate>
-        </dx:GridViewDataColumn>
                       <%--  <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" VisibleIndex="3" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
 <HeaderStyle CssClass="custom-grid-header"></HeaderStyle>
 
@@ -296,6 +323,9 @@
                 </Items>
                 <Items>
                     <dx:MenuItem Name="RemoveColumn" Text="Seçili sütunu kaldır" />
+                </Items>
+                 <Items>
+                    <dx:MenuItem Name="savesql" Text="kaydetSQL" />
                 </Items>
             </dx:ASPxPopupMenu>
         </div>

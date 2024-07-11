@@ -219,6 +219,7 @@
     <Compile Include="DB\Model\AdmWorkstation.cs" />
     <Compile Include="DB\Model\AdmWorkcenterx.cs" />
     <Compile Include="DB\Model\events.cs" />
+    <Compile Include="DB\Model\FaturaModel.cs" />
     <Compile Include="DB\Model\hazalmenu.cs" />
     <Compile Include="DB\Model\hazaluser.cs" />
     <Compile Include="DB\Model\hazalusermenu.cs" />

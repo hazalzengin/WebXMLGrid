@@ -16,15 +16,19 @@ using DevExpress.Web.ASPxThemes;
 using DayRenderEventArgs = System.Web.UI.WebControls.DayRenderEventArgs;
 using System.Configuration;
 using System.Web.Script.Services;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace ControlGridWebApp
 {
     public partial class FrmKullanıcılar : Page
     {
-     
-      
+
+
         private readonly hazaluserservice _userService;
-        private readonly eventsservice _eventsservice;
         private readonly hazalusermenuservice _usermenuservice;
         public string ConnectionString = @"Data source=HAZAL;Initial Catalog=hazal;Integrated Security=True";
         public int _userId;
@@ -35,59 +39,63 @@ namespace ControlGridWebApp
             _userService = new hazaluserservice(ConnectionString);
 
         }
-        public void AddNoteToDatabase(string noteText, DateTime noteDate)
+
+
+        protected async void Page_Load(object sender, EventArgs e)
         {
-             int sonuc = _eventsservice.Ekle(new events
-            {
-                startday = txtUsername.Text,
-                enddate = txtEmail.Text,
-                Events = txtPassword.Text
-            });
-        }
-        public void ShowEvents()
-        {
-           
-
-            List<events> events = _eventsservice.GetAllUsers();
-           
-          
-             
-        }
-        private void AddNewEvent(DateTime start, DateTime end, string eventName)
-        {
-
-            int newEvent = _eventsservice.Ekle(new events
-            {
-                startday = start.ToLongDateString(),
-                enddate = end.ToLongDateString(),
-                Events = eventName
-            });
-
-            SqlDataSource3.InsertParameters["startday"].DefaultValue = start.ToString();
-            SqlDataSource3.InsertParameters["enddate"].DefaultValue = end.ToString();
-            SqlDataSource3.InsertParameters["event"].DefaultValue = eventName;
-
-            SqlDataSource3.Insert();
-        }
-
-      
-
-
-        protected void Page_Load(object sender, EventArgs e)
-        {
-           
-
-
             _userId = int.Parse(Request.QueryString["userId"]);
-
+           
             if (!IsPostBack)
             {
+                txtSearchStartdate.Value = DateTime.Now.AddMonths(-1);
+                txtSearchEnddate.Value = DateTime.Now;
                 FillGridWithUserColumns();
             }
             if (Request["__EVENTTARGET"] == "AddColumn")
             {
                 string columnName = Request["__EVENTARGUMENT"];
                 AddColumnToGridView(columnName);
+            }
+
+            GridDoldur();
+
+        }
+        protected async  void FilterChanged(object sender, EventArgs e)
+        {
+              GridDoldur();
+        }
+
+        public async void GridDoldur()
+        {
+            try
+            {
+                string startdate = DateTime.Parse(txtSearchStartdate.Value + " ").ToString("yyyy-MM-dd");
+                string enddate = DateTime.Parse(txtSearchEnddate.Value + " ").ToString("yyyy-MM-dd");
+                //string startdate = "2024-06-01";
+                //string enddate = "2024-09-07";
+
+
+                using (var httpClient = new HttpClient())
+                {
+                    HttpResponseMessage response = await httpClient.GetAsync(apiUrl + queryParams);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        DataTable dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+
+                        GridFatura.DataSource = dataTable;
+                        GridFatura.DataBind();
+                    }
+                    else
+                    {
+                        Response.Write("API isteği başarısız: " + response.StatusCode);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write("Hata oluştu: " + ex.Message);
             }
         }
 
@@ -100,7 +108,7 @@ namespace ControlGridWebApp
             Grid.Columns.Add(newColumn);
         }
 
-     
+
 
 
         protected void gridPopupMenu_ItemClick(object source, DevExpress.Web.MenuItemEventArgs e)
@@ -110,6 +118,8 @@ namespace ControlGridWebApp
                 case "SaveItem":
                     SaveGridPropertiesAsXml();
                     break;
+
+
             }
         }
 
@@ -138,7 +148,7 @@ namespace ControlGridWebApp
                 int index = 0;
                 foreach (GridViewDataColumn column in Grid.VisibleColumns)
                 {
-                    if (column.VisibleIndex > 2)
+                    if (column.VisibleIndex > 0)
                     {
                         XmlElement columnNode = xmlDoc.CreateElement("Column");
                         columnNode.SetAttribute("Name", column.FieldName);
@@ -160,11 +170,6 @@ namespace ControlGridWebApp
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", $"alert('XML dosyası oluşturulurken hata oluştu: {ex.Message}');", true);
             }
         }
-
-
-
-
-
         protected void btnGuncellePage_Click(object sender, EventArgs e)
         {
             string userId = ((DevExpress.Web.ASPxButton)sender).CommandArgument;
@@ -184,43 +189,47 @@ namespace ControlGridWebApp
         }
         protected void btnFirstGrid_Click(object sender, EventArgs e)
         {
-            List<string> columnOrder = new List<string> { "Id", "email", "password", "username" };
-            for (int i = Grid.Columns.Count - 4; i >= 0; i--)
-            {
-                if (columnOrder.Contains(Grid.Columns[i].Caption))
-                {
-                    Grid.Columns.RemoveAt(i);
-                }
-            }
+            //List<string> columnOrder = new List<string> { "Id", "email", "password", "username" };
+            //for (int i = Grid.Columns.Count - 1; i > 0; i--)
+            //{
+            //    Grid.Columns.RemoveAt(i);
+            //}
 
-            foreach (var columnName in columnOrder)
-            {
-                GridViewDataTextColumn newColumn = new GridViewDataTextColumn();
-                newColumn.FieldName = columnName;
-                newColumn.Caption = columnName;
-                Grid.Columns.Add(newColumn);
-            }
-            List<hazaluser> userList = _userService.GetAllUsers();
-            Grid.DataSource = userList;
-            Grid.DataBind();
+            //foreach (var columnName in columnOrder)
+            //{
+            //    GridViewDataTextColumn newColumn = new GridViewDataTextColumn();
+            //    newColumn.FieldName = columnName;
+            //    newColumn.Caption = columnName;
+            //    Grid.Columns.Add(newColumn);
+            //}
+            //List<hazaluser> userList = _userService.GetAllUsers();
+            //Grid.DataSource = userList;
+            //Grid.DataBind();
         }
 
-       
+        protected void btnNew_Click(object sender, EventArgs e)
+        {
+            popupNewUser.ShowOnPageLoad = true;
+        }
 
 
 
         protected void btnDelete_Click(object sender, EventArgs e)
         {
-            ASPxButton btnDelete = sender as ASPxButton;
-            int userId = Convert.ToInt32(btnDelete.CommandArgument);
-            _userService.Sil(userId);
+            LinkButton btn = sender as LinkButton;
+            if (btn != null)
+            {
+                int id = Convert.ToInt32(btn.CommandArgument);
+                _userService.Sil(id);
+            }
+
 
             FillGridWithUserColumns();
 
         }
         protected void btnYetki_Click(object sender, EventArgs e)
         {
-            string userId = ((DevExpress.Web.ASPxButton)sender).CommandArgument;
+            string userId = ((LinkButton)sender).CommandArgument;
             Response.Redirect("yetkipage.aspx?userId=" + userId);
         }
 
@@ -274,7 +283,7 @@ namespace ControlGridWebApp
                     string updateQuery = "UPDATE grid_user SET Column1 = @Column1 WHERE UserId = @UserId";
                     SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
                     updateCommand.Parameters.AddWithValue("@UserId", _userId);
-                    updateCommand.Parameters.AddWithValue("@Column1", string.Join(",", _columnOrder.Skip(4)));
+                    updateCommand.Parameters.AddWithValue("@Column1", string.Join(",", _columnOrder.Skip(1)));
                     updateCommand.ExecuteNonQuery();
                 }
                 else
@@ -282,7 +291,7 @@ namespace ControlGridWebApp
                     string query2 = "INSERT INTO grid_user (UserId, Column1) VALUES (@UserId, @Column1)";
                     SqlCommand command2 = new SqlCommand(query2, connection);
                     command2.Parameters.AddWithValue("@UserId", _userId);
-                    command2.Parameters.AddWithValue("@Column1", string.Join(",", _columnOrder.Skip(4)));
+                    command2.Parameters.AddWithValue("@Column1", string.Join(",", _columnOrder.Skip(1)));
                     command2.ExecuteNonQuery();
                 }
             }
@@ -304,12 +313,6 @@ namespace ControlGridWebApp
                 {
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.Load(xmlFilePath);
-
-
-                    //for (int i = 4; Grid.Columns.Count > i;)
-                    //{
-                    //    Grid.Columns.RemoveAt(i);
-                    //}
                     XmlNodeList columnNodes = xmlDoc.GetElementsByTagName("Column");
                     foreach (XmlNode columnNode in columnNodes)
                     {
@@ -332,7 +335,9 @@ namespace ControlGridWebApp
                 else
 
                 {
-                    List<string> columnOrder;
+
+                    List<string> columnOrder = new List<string> { "Id", "email", "password", "username" };
+
                     using (SqlConnection connection = new SqlConnection(ConnectionString))
                     {
                         var result = resultgetir(_userId, connection);
