@@ -4,6 +4,10 @@ Bu proje küçük görünse de kapsamlı bir projedir. Projede;
 
 -Kullanıcı giriş sayfası,
 
+-ASPNET Scheduler ile takvim ve ajanda,
+
+-GET ve POST ile faturalandırma
+
 -Kullanıcıların görüntülendiği sayfa (Bu sayfada yeni kullanıcı ekleme, kullanıcı silme, kullanıcı bilgilerini güncelleme, kullanıcıya yetki verme ve gride istenen sütunların eklenebilmesini sağlama alanları bulunmaktadır)
 
 -Yetki sayfası
