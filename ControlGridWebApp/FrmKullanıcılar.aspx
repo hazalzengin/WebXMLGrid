@@ -170,7 +170,7 @@
             </div>
              <div class="card-body">
 
-                    <div class="example-code mb-10">
+<%--                    <div class="example-code mb-10">
                         <div class="example-highlight">
                             <div class="form-group row">
 
@@ -187,14 +187,14 @@
                                         <ContentTemplate>
                                             <dx:ASPxButton ID="btnSearch" ClientIDMode="Static" CssClass="btn btn-sm btn-light-success font-weight-bolder mt-4 mr-3" runat="server" Image-IconID="actions_search_16x16devav" EnableViewState="False" OnClick="FilterChanged" AutoPostBack="true" Text="Ara"></dx:ASPxButton>
                                         </ContentTemplate>
-                                </div>
+                                </div>--%>
 
                                
                             </div>
                         </div>
                     </div>
-            <dx:ASPxGridView ID="GridFatura" runat="server" AutoPostBack="true"></dx:ASPxGridView>
-            <dx:ASPxButton  ID="btnFirstGrid" runat="server" Image-IconID="actions_changeview_32x32devav"  OnClick="btnFirstGrid_Click"></dx:ASPxButton>
+          <%--  <dx:ASPxGridView ID="GridFatura" runat="server" AutoPostBack="true"></dx:ASPxGridView>--%>
+            <dx:ASPxButton  ID="btnFirstGrid" runat="server" Image-IconID="actions_changeview_32x32devav"  OnClick="btnFirstGrid_Click"  AutoPostBack="true" ></dx:ASPxButton>
             <div id="selected-columns" class="droppable-columns">
                 <dx:ASPxGridView ID="Grid" runat="server" KeyFieldName="Id" ClientInstanceName="Grid" SettingsDataSecurity-AllowEdit="True" AutoGenerateColumns="False" Width="100%" EnableTheming="True" Theme="Office365">
                     <ClientSideEvents ContextMenu="function(s, e) { gridPopupMenu.ShowAtPos(e.htmlEvent.clientX, e.htmlEvent.clientY); e.htmlEvent.preventDefault(); }" />
@@ -204,7 +204,7 @@
                     <SettingsDataSecurity AllowEdit="False" AllowInsert="False" AllowDelete="False" />
                     <SettingsText EmptyHeaders=" " EmptyDataRow=" " />
                     <Columns>
-                        <dx:GridViewDataColumn Caption="" VisibleIndex="0" Width="150">
+                        <dx:GridViewDataColumn  Caption="" VisibleIndex="0" Width="150">
                             <DataItemTemplate>
                                 <asp:LinkButton ID="btnNew" runat="server" AutoPostBack="true" OnClientClick="popupNewUser.Show()"> <i class="fa fa-plus" style="font-size:28px;color:black"></i>
                                     </asp:LinkButton>

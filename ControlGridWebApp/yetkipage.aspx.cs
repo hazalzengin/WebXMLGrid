@@ -148,3 +148,24 @@ namespace ControlGridWebApp
         }
     }
 }
+
+
+//var sorgu = "SELECT * FROM " + LogoDb + ".dbo.LG_" + FirmaNo + "_CLCARD WHERE TCKNO= '" + tc_cari + "'";
+//var dtCheck = _GenelService.RunStorePrc(sorgu).Tables[0];
+//if (dtCheck != null && dtCheck.Rows.Count > 0)
+//{
+
+//    List<string> tcknoValues = new List<string>();
+
+
+//    foreach (DataRow row in dtCheck.Rows)
+//    {
+
+//        if (dtCheck.Columns.Contains("TCKNO") && row["TCKNO"] != DBNull.Value)
+//        {
+//            string tckno = row["TCKNO"].ToString();
+//            tcknoValues.Add(tckno);
+//        }
+//    }
+//    Genel.PopUpOlustur(Page, PopUpTuru.success, AdmResource.Get("BAŞARILI"));
+                             

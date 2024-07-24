@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.ComponentModel;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace ControlGridWebApp
 {
@@ -44,61 +45,20 @@ namespace ControlGridWebApp
         protected async void Page_Load(object sender, EventArgs e)
         {
             _userId = int.Parse(Request.QueryString["userId"]);
-           
+
             if (!IsPostBack)
             {
-                txtSearchStartdate.Value = DateTime.Now.AddMonths(-1);
-                txtSearchEnddate.Value = DateTime.Now;
+                //txtSearchStartdate.Value = DateTime.Now.AddMonths(-1);
+                //txtSearchEnddate.Value = DateTime.Now;
                 FillGridWithUserColumns();
+
             }
             if (Request["__EVENTTARGET"] == "AddColumn")
             {
                 string columnName = Request["__EVENTARGUMENT"];
                 AddColumnToGridView(columnName);
             }
-
-            GridDoldur();
-
         }
-        protected async  void FilterChanged(object sender, EventArgs e)
-        {
-              GridDoldur();
-        }
-
-        public async void GridDoldur()
-        {
-            try
-            {
-                string startdate = DateTime.Parse(txtSearchStartdate.Value + " ").ToString("yyyy-MM-dd");
-                string enddate = DateTime.Parse(txtSearchEnddate.Value + " ").ToString("yyyy-MM-dd");
-                //string startdate = "2024-06-01";
-                //string enddate = "2024-09-07";
-
-
-                using (var httpClient = new HttpClient())
-                {
-                    HttpResponseMessage response = await httpClient.GetAsync(apiUrl + queryParams);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string json = await response.Content.ReadAsStringAsync();
-                        DataTable dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-
-                        GridFatura.DataSource = dataTable;
-                        GridFatura.DataBind();
-                    }
-                    else
-                    {
-                        Response.Write("API isteği başarısız: " + response.StatusCode);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Response.Write("Hata oluştu: " + ex.Message);
-            }
-        }
-
 
         private void AddColumnToGridView(string columnName)
         {
@@ -107,10 +67,6 @@ namespace ControlGridWebApp
             newColumn.Caption = columnName;
             Grid.Columns.Add(newColumn);
         }
-
-
-
-
         protected void gridPopupMenu_ItemClick(object source, DevExpress.Web.MenuItemEventArgs e)
         {
             switch (e.Item.Name)
@@ -122,47 +78,69 @@ namespace ControlGridWebApp
 
             }
         }
-
-
         private void SaveGridPropertiesAsXml()
         {
-
-            UpdateColumnOrder();
             WriteXML();
             ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('kaydedildi');", true);
             SaveColumnOrder();
             ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('kaydedildi');", true);
         }
 
-
         private void WriteXML()
         {
             try
             {
-                string xmlFileName = Server.MapPath($"~/GridProperties{_userId}.xml");
-
                 XmlDocument xmlDoc = new XmlDocument();
-                XmlElement root = xmlDoc.CreateElement("GridProperties");
+                XmlElement root = xmlDoc.CreateElement("Grid");
                 xmlDoc.AppendChild(root);
-
-                int index = 0;
                 foreach (GridViewDataColumn column in Grid.VisibleColumns)
                 {
-                    if (column.VisibleIndex > 0)
-                    {
-                        XmlElement columnNode = xmlDoc.CreateElement("Column");
-                        columnNode.SetAttribute("Name", column.FieldName);
-                        columnNode.SetAttribute("Caption", column.Caption);
-                        columnNode.SetAttribute("Width", column.Width.ToString());
-                        columnNode.SetAttribute("VisibleIndex", index.ToString());
-
-                        root.AppendChild(columnNode);
-                        index++;
-                    }
+                    XmlElement columnNode = xmlDoc.CreateElement("Column");
+                    columnNode.SetAttribute("Name", column.FieldName);
+                    columnNode.SetAttribute("Caption", column.Caption);
+                    columnNode.SetAttribute("UserId",_userId.ToString());
+                    columnNode.SetAttribute("Width", column.Width.ToString());
+                    columnNode.SetAttribute("VisibleIndex", column.VisibleIndex.ToString());
+                    root.AppendChild(columnNode);
                 }
 
-                xmlDoc.Save(xmlFileName);
+                string xmlString = xmlDoc.OuterXml;
 
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    string selectQuery = "SELECT Id FROM GridDoldur WHERE UserId = @UserId";
+                    SqlCommand selectCommand = new SqlCommand(selectQuery, connection);
+                    selectCommand.Parameters.AddWithValue("@UserId", _userId);
+                    int existingId = Convert.ToInt32(selectCommand.ExecuteScalar());
+
+                    if (existingId > 0)
+                    {
+                        foreach (XmlElement node in root.SelectNodes("Column"))
+                        {
+                            var colname = node.GetAttribute("Name");
+                            var width = node.GetAttribute("Width");
+                            var visibleindex = node.GetAttribute("VisibleIndex");
+                            string updateQuery = "UPDATE GridDoldur SET ColumnName ='"+colname+"',Width ='"+width+"', VisibleIndex = '"+visibleindex+"' WHERE UserId = " + _userId+"AND Id="+existingId;
+                            SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
+                            updateCommand.ExecuteNonQuery();
+                        }
+                    }
+                    else
+                    {
+
+                        foreach (XmlElement node in root.SelectNodes("Column"))
+                        {
+                            string insertQuery = "INSERT INTO GridDoldur (UserId, ColumnName, Width, VisibleIndex) VALUES (@UserId, @ColumnName, @Width, @VisibleIndex)";
+                            SqlCommand insertCommand = new SqlCommand(insertQuery, connection);
+                            insertCommand.Parameters.AddWithValue("@UserId", _userId);
+                            insertCommand.Parameters.AddWithValue("@ColumnName", node.GetAttribute("Name"));
+                            insertCommand.Parameters.AddWithValue("@Width", node.GetAttribute("Width"));
+                            insertCommand.Parameters.AddWithValue("@VisibleIndex", node.GetAttribute("VisibleIndex"));
+                            insertCommand.ExecuteNonQuery();
+                        }
+                    }
+                }
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('XML dosyası başarıyla oluşturuldu.');", true);
             }
             catch (Exception ex)
@@ -170,6 +148,7 @@ namespace ControlGridWebApp
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", $"alert('XML dosyası oluşturulurken hata oluştu: {ex.Message}');", true);
             }
         }
+
         protected void btnGuncellePage_Click(object sender, EventArgs e)
         {
             string userId = ((DevExpress.Web.ASPxButton)sender).CommandArgument;
@@ -189,23 +168,34 @@ namespace ControlGridWebApp
         }
         protected void btnFirstGrid_Click(object sender, EventArgs e)
         {
-            //List<string> columnOrder = new List<string> { "Id", "email", "password", "username" };
-            //for (int i = Grid.Columns.Count - 1; i > 0; i--)
+
+
+            //for (int i = 0; i < Grid.Columns.Count; i++)
             //{
-            //    Grid.Columns.RemoveAt(i);
+            //    if (i!=0)
+            //    {
+            //        Grid.Columns.RemoveAt(i);
+
+            //    }
             //}
+            // List<string> columnOrder = new List<string> { "Id", "email", "password", "username" };
 
             //foreach (var columnName in columnOrder)
             //{
-            //    GridViewDataTextColumn newColumn = new GridViewDataTextColumn();
-            //    newColumn.FieldName = columnName;
-            //    newColumn.Caption = columnName;
-            //    Grid.Columns.Add(newColumn);
+            //    Grid.Columns.Add(new GridViewDataTextColumn
+            //    {
+            //        FieldName = columnName,
+            //        Caption = columnName,
+            //    });
             //}
-            //List<hazaluser> userList = _userService.GetAllUsers();
-            //Grid.DataSource = userList;
-            //Grid.DataBind();
+
+            List<hazaluser> userList = _userService.GetAllUsers();
+            Grid.DataSource = userList;
+            Grid.DataBind();
+
+
         }
+
 
         protected void btnNew_Click(object sender, EventArgs e)
         {
@@ -247,6 +237,7 @@ namespace ControlGridWebApp
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + display + "');", true);
                 popupNewUser.ShowOnPageLoad = false;
                 ClearPopupFields();
+                FillGridWithUserColumns();
 
             }
             else
@@ -257,13 +248,13 @@ namespace ControlGridWebApp
 
 
         }
-        private void UpdateColumnOrder()
-        {
-            _columnOrder = Grid.VisibleColumns.OfType<GridViewDataColumn>()
-                                           .OrderBy(column => column.VisibleIndex)
-                                           .Select(column => column.FieldName)
-                                           .ToList();
-        }
+        //private void UpdateColumnOrder()
+        //{
+        //    _columnOrder = Grid.VisibleColumns.OfType<GridViewDataColumn>()
+        //                                   .OrderBy(column => column.VisibleIndex)
+        //                                   .Select(column => column.FieldName)
+        //                                   .ToList();
+        //}
 
 
         private void SaveColumnOrder()
@@ -306,43 +297,57 @@ namespace ControlGridWebApp
         {
             try
             {
-                string xmlFilePath = Server.MapPath($"~/GridProperties{_userId}.xml");
+                string sqlQuery = "SELECT * FROM GridDoldur WHERE UserId = @UserId";
 
+                List<GridDoldur> columnConfigs = new List<GridDoldur>();
 
-                if (File.Exists(xmlFilePath))
+                using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.Load(xmlFilePath);
-                    XmlNodeList columnNodes = xmlDoc.GetElementsByTagName("Column");
-                    foreach (XmlNode columnNode in columnNodes)
-                    {
-                        string columnName = columnNode.Attributes["Name"].Value;
-                        string width = columnNode.Attributes["Width"].Value;
-                        string visibleIndex = columnNode.Attributes["VisibleIndex"].Value;
+                    connection.Open();
 
-                        Grid.Columns.Add(new GridViewDataTextColumn
+                    SqlCommand command = new SqlCommand(sqlQuery, connection);
+                    command.Parameters.AddWithValue("@UserId", _userId);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        while (reader.Read())
                         {
-                            FieldName = columnName,
-                            Caption = columnName,
-                            Width = Unit.Parse(width),
-                            Index = int.Parse(visibleIndex)
-                        });
+                            string columnName = reader["ColumnName"].ToString();
+                            string width = reader["Width"].ToString();
+                            int visibleIndex = Convert.ToInt32(reader["VisibleIndex"]);
+                            columnConfigs.Add(new GridDoldur
+                            {
+                                ColumnName = columnName,
+                                Width = width,
+                                VisibleIndex = visibleIndex
+                            });
+                        }
+
+                        reader.Close();
+                        foreach (var config in columnConfigs)
+                        {
+                            GridViewDataTextColumn gridColumn = new GridViewDataTextColumn
+                            {
+                                FieldName = config.ColumnName,
+                                Caption = config.ColumnName,
+                                Width = Unit.Parse(config.Width),
+                                VisibleIndex = config.VisibleIndex
+                            };
+
+                            Grid.Columns.Add(gridColumn);
+                            List<hazaluser> userList = _userService.GetAllUsers();
+                            Grid.DataSource = userList;
+                            Grid.DataBind();
+
+                        }
                     }
-                    List<hazaluser> userList = _userService.GetAllUsers();
-                    Grid.DataSource = userList;
-                    Grid.DataBind();
-                }
-                else
 
-                {
+                    else
 
-                    List<string> columnOrder = new List<string> { "Id", "email", "password", "username" };
-
-                    using (SqlConnection connection = new SqlConnection(ConnectionString))
                     {
-                        var result = resultgetir(_userId, connection);
-                        string columnOrderString = (string)result;
-                        columnOrder = columnOrderString.Split(',').ToList();
+
+                        List<string> columnOrder = new List<string> { "Id", "email", "password", "username" };
+
                         foreach (var columnName in columnOrder)
                         {
                             Grid.Columns.Add(new GridViewDataTextColumn
@@ -356,7 +361,6 @@ namespace ControlGridWebApp
                         Grid.DataSource = userList;
                         Grid.DataBind();
                     }
-
                 }
             }
             catch (FileNotFoundException)

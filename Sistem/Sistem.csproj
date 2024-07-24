@@ -219,7 +219,7 @@
     <Compile Include="DB\Model\AdmWorkstation.cs" />
     <Compile Include="DB\Model\AdmWorkcenterx.cs" />
     <Compile Include="DB\Model\events.cs" />
-    <Compile Include="DB\Model\FaturaModel.cs" />
+    <Compile Include="DB\Model\GridDoldur.cs" />
     <Compile Include="DB\Model\hazalmenu.cs" />
     <Compile Include="DB\Model\hazaluser.cs" />
     <Compile Include="DB\Model\hazalusermenu.cs" />
@@ -389,6 +389,7 @@
     <Compile Include="DB\Repo\BaseRepository.cs" />
     <Compile Include="DB\Repo\eventsrepo.cs" />
     <Compile Include="DB\Repo\GenelRepo.cs" />
+    <Compile Include="DB\Repo\GridDoldurRepo.cs" />
     <Compile Include="DB\Repo\hazalmenurepo.cs" />
     <Compile Include="DB\Repo\hazalusermenurepo.cs" />
     <Compile Include="DB\Repo\hazaluserrepo.cs" />
@@ -557,6 +558,7 @@
     <Compile Include="DB\Service\AdmWorkcenterxService.cs" />
     <Compile Include="DB\Service\eventsservice.cs" />
     <Compile Include="DB\Service\GenelService.cs" />
+    <Compile Include="DB\Service\GridDoldurService.cs" />
     <Compile Include="DB\Service\hazalmenuservice.cs" />
     <Compile Include="DB\Service\hazalusermenuservice.cs" />
     <Compile Include="DB\Service\hazaluserservice.cs" />

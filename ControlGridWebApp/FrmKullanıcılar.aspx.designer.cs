@@ -51,42 +51,6 @@ namespace ControlGridWebApp
         protected global::DevExpress.Web.ASPxScheduler.ASPxDateNavigator ASPxDateNavigator1;
 
         /// <summary>
-        /// txtSearchStartdate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxDateEdit txtSearchStartdate;
-
-        /// <summary>
-        /// txtSearchEnddate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxDateEdit txtSearchEnddate;
-
-        /// <summary>
-        /// btnSearch control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSearch;
-
-        /// <summary>
-        /// GridFatura control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView GridFatura;
-
-        /// <summary>
         /// btnFirstGrid control.
         /// </summary>
         /// <remarks>
