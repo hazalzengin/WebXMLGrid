@@ -18,12 +18,13 @@ namespace Sistem.DB.Model
 
         }
 
-        public hazaluser(string username, string password, string email)
+        public hazaluser(int Id, string username, string password, string email, string events)
         {
             this.username = username;
             this.password = password;
             this.email = email;
-
+            this.Id = Id;
+            this.events = events;
 
         }
         [Identity("hazaluser_seq")]
@@ -44,6 +45,13 @@ namespace Sistem.DB.Model
         [Field("password")]
         [ParameterType(DbType.String)]
         public string password { get; set; }
+
+
+        [Field("events")]
+        [ParameterType(DbType.String)]
+        public string events { get; set; }
+
+
 
 
     }
