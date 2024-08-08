@@ -1,5 +1,7 @@
 ﻿<%@ Page Async="true" Language="C#" AutoEventWireup="true" CodeBehind="FrmKullanıcılar.aspx.cs" Inherits="ControlGridWebApp.FrmKullanıcılar" %>
 
+<%@ Register Assembly="DevExpress.Web.ASPxPivotGrid.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxPivotGrid" TagPrefix="dx" %>
+
 <%@ Register Assembly="DevExpress.Web.ASPxScheduler.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxScheduler" TagPrefix="dxwschs" %>
 
 <%@ Register Assembly="DevExpress.Web.v19.1, Version=19.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web" TagPrefix="dx" %>
@@ -20,7 +22,6 @@
 
     <script>
         $(document).ready(function () {
-            // Initialize draggable columns
             $(".column-item").draggable({
                 revert: "invalid",
                 helper: "clone"
@@ -29,8 +30,9 @@
             $("#Grid").droppable({
                 accept: ".column-item",
                 drop: function (event, ui) {
-                    var columnName = ui.helper.text().trim(); // Get the text of the dragged item
-                    AddColumnToGrid(columnName); // Call function to add column
+                    var columnName = ui.helper.text().trim();
+                    AddColumnToGrid(columnName);
+                    AddFieldToPivotGrid(columnName);
                 }
             });
 
@@ -41,21 +43,20 @@
         }
     </script>
     <script type="text/javascript">
-
-        function passDateValue(CtlID, DateValue) {
-            window.opener.document.getElementById(CtlID).value = DateValue;
-            window.close();
-        }
-
         function OnButtonClick(s, e) {
             if (Grid.IsCustomizationWindowVisible())
                 Grid.HideCustomizationWindow();
             else
                 Grid.ShowCustomizationWindow();
         }
+        function OnContextMenuItemClick(s, e) {
+            if (e.item.name == "Kaydet") {
+                e.processOnServer = true;
+                e.usePostBack = true;
+            }
+        }
 
     </script>
-
     <style type="text/css">
         .auto-style1 {
             width: 951px;
@@ -126,6 +127,13 @@
                     <asp:ListItem Text="MetropolisBlue" Value="MetropolisBlue" />
                     <asp:ListItem Text="Office2003Blue" Value="Office2003Blue" />
                     <asp:ListItem Text="Office2003Olive" Value="Office2003Olive" />
+                    <asp:ListItem Text="IOS" Value="IOS" />
+                    <asp:ListItem Text="MaterialCompact" Value="MaterialCompact" />
+                     <asp:ListItem Text="Moderno" Value="Moderno" />
+                     <asp:ListItem Text="SoftOrange" Value="SoftOrange" />
+                    <asp:ListItem Text="Youthful" Value="Youthful" />
+                    <asp:ListItem Text="PlasticBlue" Value="PlasticBlue" />
+                    <asp:ListItem Text="Office2010Silver" Value="Office2010Silver" />
                 </asp:DropDownList>
             </fieldset>
         </contenttemplate>
@@ -137,79 +145,56 @@
             <div class="column-item">password</div>
             <div class="column-item">events</div>
         </div>
+          <dx:ASPxPivotGrid ID="PivotGrid" runat="server"></dx:ASPxPivotGrid>
         <div class="card-body">
             <dx:ASPxButton ID="btnFirstGrid" runat="server" Image-IconID="actions_changeview_32x32devav" OnClick="btnFirstGrid_Click" AutoPostBack="true"></dx:ASPxButton>
             <div id="selected-columns" class="droppable-columns">
-                    <SettingsPager Visible="False">
-                <dx:ASPxGridView ID="Grid" runat="server" KeyFieldName="Id" ClientInstanceName="Grid" AutoGenerateColumns="false"  Width="100%" EnableTheming="True" Theme="Office365" >
-                    <SettingsPager Visible="False">
-                    </SettingsPager>
-                     <SettingsPopup>
-        <CustomizationWindow PopupAnimationType="Slide" />
-    </SettingsPopup>
-    <SettingsBehavior EnableCustomizationWindow="true" />
-                    <%--<SettingsBehavior AllowSelectSingleRowOnly="true" AllowSelectByRowClick="true" ColumnResizeMode="Control" AllowFocusedRow="true" EnableCustomizationWindow="true" ConfirmDelete="true" />
-                    <SettingsDataSecurity AllowEdit="False" AllowInsert="true" AllowDelete="False" />
-                    <SettingsText EmptyHeaders=" " EmptyDataRow=" " />--%>
-                    <Columns>
-                        <dx:GridViewDataColumn Caption="" VisibleIndex="0" Width="150">
-                            <DataItemTemplate>
-                                <asp:LinkButton ID="btnNew" runat="server" AutoPostBack="true" OnClientClick="popupNewUser.Show()"> <i class="fa fa-plus" style="font-size:28px;color:black"></i>
-                                </asp:LinkButton>
-                                <asp:LinkButton ID="btnGuncelle" runat="server" FixedStyle="Left" OnClientClick=" popupGuncelle.Show()" AutoPostBack="true"><%--<i class="fa fa-edit"--%> <i class="fa fa-refresh fa-spin" style="font-size:28px;color:black"></i>
-                                </asp:LinkButton>
-                                <asp:LinkButton ID="btnDelete" runat="server" FixedStyle="Left" CommandArgument='<%# Eval("Id") %>' OnClick="btnDelete_Click" AutoPostBack="true">
-    <i class="fa fa-trash-o" style="font-size:28px;color:black"></i>
-                                </asp:LinkButton>
-                                <asp:LinkButton ID="btnYetki" runat="server" FixedStyle="Left" CommandArgument='<%# Eval("Id") %>' OnClick="btnYetki_Click" AutoPostBack="true">
-    <i class="fa fa-cog fa-spin" style="font-size:28px;color:black"></i>
-                                </asp:LinkButton>
-                            </DataItemTemplate>
-                        </dx:GridViewDataColumn>
-                        <%--  <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" VisibleIndex="3" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
-<HeaderStyle CssClass="custom-grid-header"></HeaderStyle>
-
-<CellStyle CssClass="custom-grid-row"></CellStyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="username" Caption="Kullanıcı Adı" VisibleIndex="4" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
-<HeaderStyle CssClass="custom-grid-header"></HeaderStyle>
-
-<CellStyle CssClass="custom-grid-row"></CellStyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="email" Caption="E-posta" VisibleIndex="5" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
-<HeaderStyle CssClass="custom-grid-header"></HeaderStyle>
-
-<CellStyle CssClass="custom-grid-row"></CellStyle>
-                        </dx:GridViewDataTextColumn>
-                        <dx:GridViewDataTextColumn FieldName="password" Caption="Parola" VisibleIndex="6" HeaderStyle-CssClass="custom-grid-header" CellStyle-CssClass="custom-grid-row">
-<HeaderStyle CssClass="custom-grid-header"></HeaderStyle>
-
-<CellStyle CssClass="custom-grid-row"></CellStyle>
-                        </dx:GridViewDataTextColumn>--%>
-                    </Columns>
-                      <SettingsBehavior ConfirmDelete="true" EnableCustomizationWindow="true" EnableRowHotTrack="true"/>
-        <Settings ShowFooter="true" ShowGroupPanel="true" ShowGroupFooter="VisibleIfExpanded" />
-                      <SettingsContextMenu Enabled="true" >
-            <%--<RowMenuItemVisibility ExportMenu-Visible="true">
-                <GroupSummaryMenu SummaryAverage="false" SummaryMax="false" SummaryMin="false" SummarySum="false" />
-            </RowMenuItemVisibility>--%>
-        </SettingsContextMenu>
-      
-                    <Styles>
-                        <Header CssClass="custom-grid-header" />
-                        <Row CssClass="custom-grid-row" />
-                        <AlternatingRow CssClass="custom-grid-row-alternating" />
-                        <FocusedRow BackColor="#e47922" />
-                    </Styles>
-                    <%--    <Templates>
+                    <dx:ASPxGridView ID="Grid" runat="server" KeyFieldName="Id" ClientInstanceName="Grid" OnFillContextMenuItems="grid_FillContextMenuItems" OnContextMenuItemVisibility="grid_ContextMenuItemVisibility" OnContextMenuItemClick="grid_ContextMenuItemClick" Width="50%" AutoGenerateColumns="False" EnableTheming="true" Theme="">
+                       <SettingsBehavior ConfirmDelete="true" EnableCustomizationWindow="true" EnableRowHotTrack="true" ColumnResizeMode="Control" />
+                        <%--    <Templates>
                                 <EmptyDataRow>
                                     <div id="gridDropZone" style="width: 100%; height: 20px; border: 1px solid #ccc; background-color: #f0f0f0; text-align: center; line-height: 20px;">Drop columns here</div>
                                 </EmptyDataRow>
                             </Templates>--%>
-                </dx:ASPxGridView>
-   
+                        <ClientSideEvents ContextMenuItemClick="OnContextMenuItemClick"/>
+                        <SettingsContextMenu Enabled="true">
+                            <RowMenuItemVisibility NewRow="false" EditRow="false" Refresh="true" DeleteRow="false">
+                                <ExportMenu Visible="false" />
+                            </RowMenuItemVisibility>
+                        </SettingsContextMenu>
+                        <SettingsPager Visible="False">
+                        </SettingsPager>
+                        <Settings ShowFooter="true" ShowGroupPanel="true" ShowGroupFooter="VisibleIfExpanded" />
+                        <SettingsBehavior EnableCustomizationWindow="true" />
+                        <SettingsPopup>
+                            <CustomizationWindow PopupAnimationType="Slide" />
+                        </SettingsPopup>
+                        <Columns>
+                            <dx:GridViewDataColumn Caption="" VisibleIndex="0">
+                                <DataItemTemplate>
+                                    <asp:LinkButton ID="btnNew" runat="server" AutoPostBack="true" OnClientClick="popupNewUser.Show()"> <i class="fa fa-plus" style="font-size:28px;color:black"></i>
+                                    </asp:LinkButton>
+                                    <asp:LinkButton ID="btnGuncelle" runat="server" FixedStyle="Left" OnClientClick=" popupGuncelle.Show()" AutoPostBack="true"><%--<i class="fa fa-edit"--%> <i class="fa fa-refresh fa-spin" style="font-size:28px;color:black"></i>
+                                    </asp:LinkButton>
+                                    <asp:LinkButton ID="btnDelete" runat="server" FixedStyle="Left" CommandArgument='<%# Eval("Id") %>' OnClick="btnDelete_Click" AutoPostBack="true">
+                                        <i class="fa fa-trash-o" style="font-size:28px;color:black"></i>
+                                    </asp:LinkButton>
+                                    <asp:LinkButton ID="btnYetki" runat="server" FixedStyle="Left" CommandArgument='<%# Eval("Id") %>' OnClick="btnYetki_Click" AutoPostBack="true">
+                                        <i class="fa fa-cog fa-spin" style="font-size:28px;color:black"></i>
+                                    </asp:LinkButton>
+                                </DataItemTemplate>
+                            </dx:GridViewDataColumn>
+                        </Columns>
+                         <Settings HorizontalScrollBarMode="Auto" />
+                        <Styles>
+                            <Header CssClass="custom-grid-header" />
+                            <Row CssClass="custom-grid-row" />
+                            <AlternatingRow CssClass="custom-grid-row-alternating" />
+                            <FocusedRow BackColor="#e47922" />
+                        </Styles>
+                    </dx:ASPxGridView>
             </div>
-
+          
             <dx:ASPxPopupControl ID="popupNewUser" runat="server" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ShowCloseButton="True" ShowFooter="True" Modal="True" Width="400px">
                 <ContentCollection>
                     <dx:PopupControlContentControl runat="server">
@@ -281,14 +266,6 @@
                     </dx:PopupControlContentControl>
                 </ContentCollection>
             </dx:ASPxPopupControl>
-            <dx:ASPxPopupMenu ID="ASPxPopupMenu1" runat="server" ClientInstanceName="gridPopupMenu" OnItemClick="gridPopupMenu_ItemClick" Theme="Aqua">
-                <Items>
-                    <dx:MenuItem Name="SaveItem" Text="Kaydet" />
-                </Items>
-                <Items>
-                    <dx:MenuItem Name="HideColumn" Text="Seçili sütunu kaldır" />
-                </Items>
-            </dx:ASPxPopupMenu>
         </div>
     </form>
 </body>

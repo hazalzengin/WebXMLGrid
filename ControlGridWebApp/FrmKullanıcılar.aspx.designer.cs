@@ -42,6 +42,15 @@ namespace ControlGridWebApp
         protected global::System.Web.UI.WebControls.DropDownList DropDownList1;
 
         /// <summary>
+        /// PivotGrid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxPivotGrid.ASPxPivotGrid PivotGrid;
+
+        /// <summary>
         /// btnFirstGrid control.
         /// </summary>
         /// <remarks>
@@ -157,14 +166,5 @@ namespace ControlGridWebApp
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxHiddenField editUserId;
-
-        /// <summary>
-        /// ASPxPopupMenu1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupMenu ASPxPopupMenu1;
     }
 }

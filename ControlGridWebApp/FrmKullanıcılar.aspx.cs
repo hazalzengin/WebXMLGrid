@@ -11,7 +11,9 @@ using Sistem.DB.Service;
 
 using System.Collections.Generic;
 using System.Linq;
+using DevExpress.Web.ASPxPivotGrid;
 
+using PivotGridField = DevExpress.Web.ASPxPivotGrid.PivotGridField;
 
 namespace ControlGridWebApp
 {
@@ -31,29 +33,35 @@ namespace ControlGridWebApp
 
         }
 
-      
+
         protected async void Page_Load(object sender, EventArgs e)
         {
-
-          // GridViewFeaturesHelper.SetupGlobalGridViewBehavior(Grid);
             _userId = int.Parse(Request.QueryString["userId"]);
-      
+           
             if (!IsPostBack)
             {
                 //txtSearchStartdate.Value = DateTime.Now.AddMonths(-1);
                 //txtSearchEnddate.Value = DateTime.Now;
-                FillGridWithUserColumns();
-               
-            }
+                GridDoldur();
 
+            }
+            List<hazaluser> userList = _userService.GetAllUsers();
+            Grid.DataSource = userList;
+            Grid.DataBind();
+
+            PivotGrid.DataSource = Grid.DataSource;
+            PivotGrid.RetrieveFields();
+        
             if (IsPostBack && Request["__EVENTTARGET"] == "AddColumn")
             {
                 string columnName = Request["__EVENTARGUMENT"];
-                AddColumnToGridView(columnName);
+                // AddColumnToGridView(columnName);
+                AddFieldToPivotGrid(columnName);
             }
-            
-        }
 
+        
+
+        }
 
         protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -64,10 +72,37 @@ namespace ControlGridWebApp
         }
 
 
+        private void AddFieldToPivotGrid(string fieldName)
+        {
+            foreach (PivotGridField field in PivotGrid.Fields)
+            {
+                if (field.FieldName == fieldName)
+                {
+                    return;
+                }
+            }
+
+
+            DevExpress.XtraPivotGrid.PivotGridField newField = new DevExpress.XtraPivotGrid.PivotGridField();
+            newField.FieldName = fieldName;
+            newField.Caption = fieldName;
+          //  newField.Area = DevExpress.Web.ASPxPivotGrid.DataArea; 
+            PivotGrid.Fields.Add(newField);
+            //PivotGrid.Fields.Add(fieldName, DevExpress.XtraPivotGrid.PivotArea.RowArea);
+            //PivotGrid.Fields.Add(fieldName, DevExpress.XtraPivotGrid.PivotArea.RowArea);
+            //PivotGrid.Fields.Add(fieldName, DevExpress.XtraPivotGrid.PivotArea.RowArea);
+
+            PivotGrid.Fields.Add(fieldName, DevExpress.XtraPivotGrid.PivotArea.DataArea);
+
+            List<hazaluser> userList = _userService.GetAllUsers();
+            PivotGrid.DataSource = userList;
+            PivotGrid.DataBind();
+        }
+
 
         private void AddColumnToGridView(string columnName)
         {
-          
+
             foreach (GridViewColumn column in Grid.Columns)
             {
                 if (column is GridViewDataTextColumn textColumn && textColumn.FieldName == columnName)
@@ -84,26 +119,39 @@ namespace ControlGridWebApp
             Grid.DataBind();
 
         }
-        protected void gridPopupMenu_ItemClick(object source, DevExpress.Web.MenuItemEventArgs e)
+
+        protected void grid_ContextMenuItemVisibility(object sender, ASPxGridViewContextMenuItemVisibilityEventArgs e)
         {
-            switch (e.Item.Name)
+            if (e.MenuType == GridViewContextMenuType.Rows)
             {
-                case "SaveItem":
-                    WriteXML();
-                    break;
-                case "hidecolumn":
-                    HideColumn();
-                    break;
-
-
+                GridViewContextMenuItem itemDuzenle = e.Items.Find(item => item.Name == "Kaydet") as GridViewContextMenuItem;
+                
             }
         }
 
-        private void HideColumn()
+        protected void grid_FillContextMenuItems(object sender, ASPxGridViewContextMenuEventArgs e)
         {
-           
-        }
+            if (e.MenuType == GridViewContextMenuType.Rows)
+            {
 
+                var itemIncele = e.CreateItem("Kaydet", "Kaydet");
+                itemIncele.Image.IconID = "actions_apply_16x16"; 
+                e.Items.Insert(e.Items.IndexOfCommand(GridViewContextMenuCommand.Refresh), itemIncele);
+            }
+        }
+        protected void grid_ContextMenuItemClick(object sender, ASPxGridViewContextMenuItemClickEventArgs e)
+        {
+            switch (e.Item.Name)
+            {
+                case "Kaydet":
+                    {
+                        var item = Grid.GetDataRow(Grid.FocusedRowIndex);
+                        WriteXML();
+                        break;
+                    }
+            }
+        }
+     
         private void WriteXML()
         {
             try
@@ -113,14 +161,13 @@ namespace ControlGridWebApp
                 XmlElement root = xmlDoc.CreateElement("GridProperties");
                 xmlDoc.AppendChild(root);
                 int index = 0;
-                foreach (GridViewDataColumn column in Grid.VisibleColumns)
+                foreach (GridViewDataColumn column in Grid.Columns)
                 {
 
                     if (column.VisibleIndex > 0)
                     {
                         XmlElement columnNode = xmlDoc.CreateElement("Column");
                         columnNode.SetAttribute("Name", column.FieldName);
-                        columnNode.SetAttribute("Visible", column.Visible.ToString());
                         columnNode.SetAttribute("Caption", column.Caption);
                         columnNode.SetAttribute("Width", column.Width.ToString());
                         columnNode.SetAttribute("VisibleIndex", index.ToString());
@@ -128,9 +175,16 @@ namespace ControlGridWebApp
                         index++;
 
                     }
+                   
                 }
-                xmlDoc.Save(xmlFileName);
+                XmlElement theme = xmlDoc.CreateElement("Theme");
+                theme.SetAttribute("Theme", Grid.Theme);
+                root.AppendChild(theme);
+                xmlDoc.Save(xmlFileName); 
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('XML dosyası başarıyla oluşturuldu.');", true);
+                List<hazaluser> userList = _userService.GetAllUsers();
+                Grid.DataSource = userList;
+                Grid.DataBind();
             }
             catch (Exception ex)
             {
@@ -158,7 +212,7 @@ namespace ControlGridWebApp
         protected void btnFirstGrid_Click(object sender, EventArgs e)
         {
             string filePath = Server.MapPath($"~/GridProperties{_userId}.xml");
-           
+
             ClientScript.RegisterStartupScript(this.GetType(), "myalert", $"alert('Grid özelliklerini silmek istediğinizden emin misiniz?');", true);
             File.Delete(filePath);
 
@@ -166,7 +220,6 @@ namespace ControlGridWebApp
             Grid.DataSource = userList;
             Grid.DataBind();
 
-          
 
             //ClientScript.RegisterStartupScript(this.GetType(), "alertSuccess", "alert('XML dosyası başarıyla silindi.');", true);
 
@@ -191,7 +244,7 @@ namespace ControlGridWebApp
             }
 
 
-          //  FillGridWithUserColumns();
+            //  FillGridWithUserColumns();
 
         }
         protected void btnYetki_Click(object sender, EventArgs e)
@@ -214,7 +267,7 @@ namespace ControlGridWebApp
                 ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + display + "');", true);
                 popupNewUser.ShowOnPageLoad = false;
                 ClearPopupFields();
-                FillGridWithUserColumns();
+                GridDoldur();
 
             }
             else
@@ -225,110 +278,46 @@ namespace ControlGridWebApp
 
 
         }
-        //private void UpdateColumnOrder()
-        //{
-        //    _columnOrder = Grid.VisibleColumns.OfType<GridViewDataColumn>()
-        //                                   .OrderBy(column => column.VisibleIndex)
-        //                                   .Select(column => column.FieldName)
-        //                                   .ToList();
-        //}
 
 
-        private void SaveColumnOrder()
+
+        private void GridDoldur()
         {
-            try
+            List<string> columnOrder;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                SqlConnection connection = new SqlConnection(ConnectionString);
-                connection.Open();
-                string query = "SELECT Column1 FROM grid_user WHERE UserId = @UserId";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@UserId", _userId);
-                object result = command.ExecuteScalar();
-
-
-                if (result != DBNull.Value)
+                string xmlFilePath = Server.MapPath($"~/GridProperties{_userId}.xml");
+                if (File.Exists(xmlFilePath))
                 {
-                    string updateQuery = "UPDATE grid_user SET Column1 = @Column1 WHERE UserId = @UserId";
-                    SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
-                    updateCommand.Parameters.AddWithValue("@UserId", _userId);
-                    updateCommand.Parameters.AddWithValue("@Column1", string.Join(",", _columnOrder.Skip(1)));
-                    updateCommand.ExecuteNonQuery();
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.Load(xmlFilePath);
+                    XmlNodeList columnNodes = xmlDoc.GetElementsByTagName("Column");
+                    XmlNodeList themes = xmlDoc.GetElementsByTagName("Theme");
+                    foreach(XmlNode them in themes)
+                    {
+                        string theme = them.Attributes["Theme"].Value; 
+                        Grid.Theme = theme;
+                    }
+                    foreach (XmlNode columnNode in columnNodes)
+                    {
+                        string columnName = columnNode.Attributes["Name"].Value;
+                        string width = columnNode.Attributes["Width"].Value;
+                        string visibleIndex = columnNode.Attributes["VisibleIndex"].Value;
+                        Grid.Columns.Add(new GridViewDataTextColumn
+                        {
+                            FieldName = columnName,
+                            Caption = columnName,
+                            Width = Unit.Parse(width),
+                            Index = int.Parse(visibleIndex)
+                        });
+                    }
+                    List<hazaluser> userList = _userService.GetAllUsers();
+                    Grid.DataSource = userList;
+                    Grid.DataBind();
                 }
                 else
                 {
-                    string query2 = "INSERT INTO grid_user (UserId, Column1) VALUES (@UserId, @Column1)";
-                    SqlCommand command2 = new SqlCommand(query2, connection);
-                    command2.Parameters.AddWithValue("@UserId", _userId);
-                    command2.Parameters.AddWithValue("@Column1", string.Join(",", _columnOrder.Skip(1)));
-                    command2.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "myalert", $"alert('XML dosyası oluşturulurken hata oluştu: {ex.Message}');", true);
-            }
-        }
-
-
-        private void FillGridWithUserColumns()
-        {
-            try
-            {
-                List<string> columnOrder;
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
-                {
-                    string xmlFilePath = Server.MapPath($"~/GridProperties{_userId}.xml");
-                    if (File.Exists(xmlFilePath))
-                    {
-                        XmlDocument xmlDoc = new XmlDocument();
-                        xmlDoc.Load(xmlFilePath);
-
-                      
-                            XmlNodeList columnNodes = xmlDoc.GetElementsByTagName("Column");
-                        foreach (XmlNode columnNode in columnNodes)
-                        {
-              
-                            string columnName = columnNode.Attributes["Name"].Value;
-                            string width = columnNode.Attributes["Width"].Value;
-                            string visibleIndex = columnNode.Attributes["VisibleIndex"].Value;
-
-                            Grid.Columns.Add(new GridViewDataTextColumn
-                            {
-                                FieldName = columnName,
-                                Caption = columnName,
-                                Width = Unit.Parse(width),
-                                Index = int.Parse(visibleIndex)
-                            });
-                        }
-                        List<hazaluser> userList = _userService.GetAllUsers();
-                        Grid.DataSource = userList;
-                        Grid.DataBind();
-                    }
-                    else
-                    {
-                        columnOrder = new List<string> {"Id","password","email"};
-                        foreach (var columnName in columnOrder)
-                        {
-                            Grid.Columns.Add(new GridViewDataTextColumn
-                            {
-                                FieldName = columnName,
-                                Caption = columnName,
-                            });
-                        }
-                        List<hazaluser> userList = _userService.GetAllUsers();
-                        Grid.DataSource = userList;
-                        Grid.DataBind();
-                    }
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                List<string> columnOrder = new List<string> { };
-
-                using (SqlConnection connection = new SqlConnection(ConnectionString))
-                {
-                    
-
+                    columnOrder = new List<string> { "Id", "password", "email" };
                     foreach (var columnName in columnOrder)
                     {
                         Grid.Columns.Add(new GridViewDataTextColumn
@@ -337,68 +326,18 @@ namespace ControlGridWebApp
                             Caption = columnName,
                         });
                     }
-
                     List<hazaluser> userList = _userService.GetAllUsers();
                     Grid.DataSource = userList;
                     Grid.DataBind();
                 }
-
             }
         }
-
-
-        private object resultgetir(int userId, SqlConnection connection)
-        {
-            connection.Open();
-            string query = "SELECT Column1 FROM grid_user WHERE UserId = " + _userId + "";
-            SqlCommand command = new SqlCommand(query, connection);
-            object result2 = command.ExecuteScalar();
-            if (result2 == null || result2 == DBNull.Value)
-            {
-                query = "SELECT Column1 FROM grid_user WHERE UserId = 0";
-                command = new SqlCommand(query, connection);
-                result2 = command.ExecuteScalar();
-            }
-
-            return result2;
-        }
-
-
-        //protected void btnUpdateUser_Click(object sender, EventArgs e)
-        //{
-        //    int rowIndex = Grid.FocusedRowIndex;
-        //    if (rowIndex < 0)
-        //        return;
-        //    object id = Grid.GetRowValues(rowIndex, "Id");
-
-        //    string username = editUsername.Text;
-        //    string email = editEmail.Text;
-        //    string password = editPassword.Text;
-
-        //    int sonuc = _userService.Guncelle(new hazaluser
-        //    {
-        //        Id = int.Parse(string.Format("{0}", id)),
-        //        username = username,
-        //        email = email,
-        //        password = password
-        //    }); ;
-        //    if (sonuc > 0)
-        //    {
-        //        string display = "Kullanıcı Bilgileri Güncellendi";
-        //        ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('" + display + "');", true);
-        //        ClearPopupFields();
-        //        BindGrid();
-        //        popupGuncelle.ShowOnPageLoad = false;
-        //    }
-        //}
         private void ClearPopupFields()
         {
             txtUsername.Text = string.Empty;
             txtEmail.Text = string.Empty;
             txtPassword.Text = string.Empty;
         }
-
-
     }
 }
 
